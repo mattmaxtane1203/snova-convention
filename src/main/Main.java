@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import model.User;
 import view.Init;
+import view.RegisterPage;
 
 public class Main extends Application {
 
@@ -43,13 +44,15 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		new Main();
-//		launch(args);
+//		SWITCH THESE WHEN TESTING VIEWS AND CONTROLLERS
+		
+//		new Main();
+		launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		new Init(primaryStage);
+		new RegisterPage(primaryStage);
 		
 		primaryStage.setTitle("SNova Convention");
 		primaryStage.show();

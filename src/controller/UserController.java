@@ -88,15 +88,19 @@ public class UserController {
 	
 	public static String registrationInformationIsValid(String username, String email, String password, String confirmPassword, String role) {
 		
+		if(username.equals("") || email.equals("") || password.equals("") || confirmPassword.equals("")) {
+			return "Fields cannot be empty";
+		}
+		
 		User user = UserController.getUserByEmail(email);
 		
-		if(user != null) {
+		if(user != null || email.equals("")) {
 			return email + " is already registered";
 		}
 		
 		user = User.getUserByUsername(username);
 		
-		if(user != null) {
+		if(user != null || username.equals("")) {
 			return username + " is already registered";
 		}
 		

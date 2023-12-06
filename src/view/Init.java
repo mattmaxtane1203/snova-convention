@@ -1,4 +1,4 @@
-package scene;
+package view;
 
 import db.Connect;
 import javafx.scene.Scene;

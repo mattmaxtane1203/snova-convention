@@ -2,10 +2,13 @@ package main;
 
 import java.util.Vector;
 
+import controller.PanelController;
 import controller.UserController;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.PanelHeader;
 import model.User;
+import view.InfluencerPage;
 import view.Init;
 import view.RegisterPage;
 
@@ -41,6 +44,7 @@ public class Main extends Application {
 		
 //		String res = UserController.login("user2@example.com", "password2");
 //		System.out.println("Response: " + res);
+		
 	}
 
 	public static void main(String[] args) {
@@ -53,6 +57,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		new RegisterPage(primaryStage);
+		
+		//Ini buat testing page Influencer... vvvv
+		//new InfluencerPage(primaryStage);
 		
 		primaryStage.setTitle("SNova Convention");
 		primaryStage.show();

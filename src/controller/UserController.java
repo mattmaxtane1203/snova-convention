@@ -2,7 +2,10 @@ package controller;
 
 import java.util.Vector;
 
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import model.User;
+import view.LoginPage;
 
 public class UserController {
 
@@ -150,5 +153,46 @@ public class UserController {
 	    
 	    return "true";
 	}
-	
+
+	public static void handleLogin(Button loginBtn, Stage stage) {
+		
+		loginBtn.setOnMouseClicked(e -> {
+			
+			String email = LoginPage.emailField.getText();
+			String password = LoginPage.passwordField.getText();
+			
+			User user = getUserByEmail(email);
+			
+			if(user == null || !password.equals(user.getPassword())) {
+				LoginPage.response.setText("Invalid email/password");
+				return;
+			}
+			
+//			TODO: navigate to respective home pages
+			if(user.getRole().equals("Fan")) {
+				System.out.println("Fan");
+				return;
+			}
+			
+			if(user.getRole().equals("Vendor")) {
+				System.out.println("Vendor");
+				return;
+			}
+			
+			if(user.getRole().equals("Influencer")) {
+				System.out.println("Influencer");
+				return;
+			}
+			
+			if(user.getRole().equals("Admin")) {
+				System.out.println("Admin");
+				return;
+			}
+			
+			System.out.println("Something went wrong...");
+			return;
+			
+		});
+		
+	}
 }

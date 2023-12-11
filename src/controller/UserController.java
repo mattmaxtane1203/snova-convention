@@ -94,15 +94,30 @@ public class UserController {
 		
 		User user = UserController.getUserByEmail(email);
 		
-		if(user != null || email.equals("")) {
+		if(user != null) {
 			return email + " is already registered";
 		}
 		
 		user = User.getUserByUsername(username);
 		
-		if(user != null || username.equals("")) {
+		if(user != null) {
 			return username + " is already registered";
 		}
+		
+		String passwordRes = UserController.passwordIsValid(password, confirmPassword);
+		
+		if(!passwordRes.equals("true")){
+			return passwordRes;
+		}
+	    
+	    if(role == null) {
+	    	return "A role must be chosen";
+	    }
+		
+		return "true";
+	}
+	
+	public static String passwordIsValid(String password, String confirmPassword) {
 		
 		if(password.length() < 6) {
 			return "Password must be at least 6 characters long";
@@ -114,7 +129,9 @@ public class UserController {
 	    for (char c : password.toCharArray()) {
 	        if (Character.isLetter(c)) {
 	            hasLetter = true;
-	        } else if (Character.isDigit(c)) {
+	        }
+	        
+	        if (Character.isDigit(c)) {
 	            hasDigit = true;
 	        }
 	        
@@ -131,11 +148,7 @@ public class UserController {
 	    	return "Password does not match";
 	    }
 	    
-	    if(role == null) {
-	    	return "A role must be chosen";
-	    }
-		
-		return "true";
+	    return "true";
 	}
 	
 }

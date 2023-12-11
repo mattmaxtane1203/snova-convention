@@ -5,7 +5,9 @@ import java.util.Vector;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import model.User;
+import view.Init;
 import view.LoginPage;
+import view.RegisterPage;
 
 public class UserController {
 
@@ -194,5 +196,46 @@ public class UserController {
 			
 		});
 		
+	}
+
+	public static void handleRegister(Button registerBtn, Stage stage) {
+		registerBtn.setOnMouseClicked(e -> {
+			String username = RegisterPage.usernameField.getText();
+			String email = RegisterPage.emailField.getText();
+			String password = RegisterPage.passwordField.getText();
+			String confirmPassword = RegisterPage.confirmPasswordField.getText();
+			String role = RegisterPage.roleCB.getValue();
+			
+			String responseVal = UserController.addUser(username, email, password, confirmPassword, role);
+			
+			if(!responseVal.equals("User successfully added")) {
+				RegisterPage.response.setText(responseVal);
+				return;
+			}
+			
+//			TODO: navigate to respective home pages
+			if(role.equals("Fan")) {
+				System.out.println("Fan");
+				return;
+			}
+			
+			if(role.equals("Vendor")) {
+				System.out.println("Vendor");
+				return;
+			}
+			
+			if(role.equals("Influencer")) {
+				System.out.println("Influencer");
+				return;
+			}
+			
+			if(role.equals("Admin")) {
+				System.out.println("Admin");
+				return;
+			}
+			
+			System.out.println("Something went wrong...");
+			return;
+		});
 	}
 }

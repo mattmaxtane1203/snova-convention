@@ -8,17 +8,20 @@ import view.RegisterPage;
 
 public class NavigationController {
 
-	public static void homePage(Stage stage) {
-		new Init(stage);
+	public static void navigateHomePage(Button btn, Stage stage) {
+		btn.setOnMouseClicked(e -> {			
+			new Init(stage);
+		});
 	}
 	
-	public static void navigateLoginPage(Button loginBtn, Stage stage) {
-		
-		
+	public static void navigateLoginPage(Button btn, Stage stage) {
+		btn.setOnMouseClicked(e -> {
+			new LoginPage(stage);
+		});
 	}
 	
-	public static void navigateRegisterPage(Button registerBtn, Stage stage) {
-		registerBtn.setOnMouseClicked(e -> {
+	public static void navigateRegisterPage(Button btn, Stage stage) {
+		btn.setOnMouseClicked(e -> {
 			new RegisterPage(stage);
 		});
 	}

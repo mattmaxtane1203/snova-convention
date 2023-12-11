@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 
+import controller.NavigationController;
 import controller.UserController;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -22,11 +23,12 @@ public class RegisterPage {
 	VBox registerContainer;
 	VBox usernameBox, emailBox, passwordBox, confirmPasswordBox, roleBox;
 	
-	Label titlePage, username, email, password, confirmPassword, role, response;
-	TextField usernameField, emailField;
-	PasswordField passwordField, confirmPasswordField;
-	ComboBox<String> roleCB;
-	Button register;
+	Label titlePage, username, email, password, confirmPassword, role, or;
+	public static Label response;
+	public static TextField usernameField, emailField;
+	public static PasswordField passwordField, confirmPasswordField;
+	public static ComboBox<String> roleCB;
+	Button register, loginBtn;
 	
 	private void init() {
 		registerPane = new BorderPane();
@@ -65,6 +67,10 @@ public class RegisterPage {
 		response = new Label("");
 		
 		register = new Button("Register");	
+		
+		or = new Label("or");
+		
+		loginBtn = new Button("Login");
 	}
 	
 	private void styling() {
@@ -106,8 +112,10 @@ public class RegisterPage {
 				titlePage,
 				usernameBox, emailBox, passwordBox, confirmPasswordBox, roleBox,
 				response,
-				register
-				);
+				register,
+				or,
+				loginBtn
+		);
 		
 		registerContainer.setPadding(new Insets(50,50,50,50));
 		
@@ -117,22 +125,8 @@ public class RegisterPage {
 	}
 
 	private void actions(Stage stage) {
-		
-		register.setOnMouseClicked(e -> {
-			String username = usernameField.getText();
-			String email = emailField.getText();
-			String password = passwordField.getText();
-			String confirmPassword = confirmPasswordField.getText();
-			String role = roleCB.getValue();
-			
-			String responseVal = UserController.addUser(username, email, password, confirmPassword, role);
-			
-			if(responseVal.equals("User successfully added")) {
-				new Init(stage);
-			}
-			
-			response.setText(responseVal);			
-		});
+		UserController.handleRegister(register, stage);
+		NavigationController.navigateLoginPage(loginBtn, stage);
 	}
 	
 	public RegisterPage(Stage stage) {

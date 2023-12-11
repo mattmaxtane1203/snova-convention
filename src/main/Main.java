@@ -56,7 +56,8 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		new LoginPage(primaryStage);
+//		new LoginPage(primaryStage);
+		new RegisterPage(primaryStage);
 		
 		primaryStage.setTitle("SNova Convention");
 		primaryStage.show();

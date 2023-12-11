@@ -187,7 +187,7 @@ public class UserController {
 			}
 			
 			if(user.getRole().equals("Admin")) {
-				System.out.println("Admin");
+				NavigationController.navigateAdminHomePage(stage, user);
 				return;
 			}
 			

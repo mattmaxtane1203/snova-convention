@@ -2,6 +2,8 @@ package controller;
 
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import model.User;
+import view.AdminHomePage;
 import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
@@ -24,6 +26,10 @@ public class NavigationController {
 		btn.setOnMouseClicked(e -> {
 			new RegisterPage(stage);
 		});
+	}
+	
+	public static void navigateAdminHomePage(Stage stage, User currentAdmin) {
+		new AdminHomePage(stage, currentAdmin);
 	}
 	
 }

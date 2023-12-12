@@ -17,10 +17,10 @@ public class PanelHeader {
 		private String location;
 		private String startTime;
 		private String endTime;
-		private Boolean isFinished;
+		private String isFinished;
 		
 		public PanelHeader(String panelID, String userID, String panelTitle, String panelDesc, String location, String startTime,
-				String endTime, Boolean isFinished) {
+				String endTime, String isFinished) {
 			this.panelID = panelID;
 			this.userID = userID;
 			this.panelTitle = panelTitle;
@@ -83,11 +83,11 @@ public class PanelHeader {
 			this.endTime = endTime;
 		}
 
-		public Boolean getIsFinished() {
+		public String getIsFinished() {
 			return isFinished;
 		}
 
-		public void setIsFinished(Boolean isFinished) {
+		public void setIsFinished(String isFinished) {
 			this.isFinished = isFinished;
 		}
 		
@@ -100,7 +100,8 @@ public class PanelHeader {
 			String currLocation;
 			String currStartTime;
 			String currEndTime;
-			Boolean currIsFinished;
+			Boolean checkIsFinished;
+			String currIsFinished;
 
 			try {
 				if (rs.next()) {
@@ -111,8 +112,10 @@ public class PanelHeader {
 					currLocation = rs.getString("Location");
 					currStartTime = rs.getString("StartTime");
 					currEndTime = rs.getString("EndTime");
-					currIsFinished = rs.getBoolean("IsFinished");
-
+					checkIsFinished = rs.getBoolean("IsFinished");
+					if(checkIsFinished.equals(true)) currIsFinished = "Finished";
+					else currIsFinished = "Not started";
+					
 					return new PanelHeader(currPanelID, currUserID, currTitle, currDesc, currLocation, 
 							currStartTime, currEndTime, currIsFinished);
 				}
@@ -124,37 +127,39 @@ public class PanelHeader {
 		}
 		
 		private static Vector<PanelHeader> setAllPanelsDetails(ResultSet rs, Vector<PanelHeader> panels) {
-			
-			String currPanelID;
-			String currUserID;
-			String currTitle;
-			String currDesc;
-			String currLocation;
-			String currStartTime;
-			String currEndTime;
-			Boolean currIsFinished;
-			
 			try {
+				String currPanelID;
+				String currUserID;
+				String currTitle;
+				String currDesc;
+				String currLocation;
+				String currStartTime;
+				String currEndTime;
+				Boolean checkIsFinished;
+				String currIsFinished;
 				while (rs.next()) {
 					currPanelID = rs.getString("PanelID");
 					currUserID = rs.getString("UserID");
 					currTitle = rs.getString("PanelTitle");
 					currDesc = rs.getString("PanelDescription");
-					currLocation = rs.getString("location");
+					currLocation = rs.getString("Location");
 					currStartTime = rs.getString("StartTime");
 					currEndTime = rs.getString("EndTime");
-					currIsFinished = rs.getBoolean("IsFinished");
-					
+					checkIsFinished = rs.getBoolean("IsFinished");
+					if(checkIsFinished.equals(true)) currIsFinished = "Finished";
+					else currIsFinished = "Not started";
 					PanelHeader currPanel = new PanelHeader(currPanelID, currUserID, currTitle, currDesc, currLocation, 
 											currStartTime, currEndTime, currIsFinished);
 					panels.add(currPanel);
 				}
+				
+				return panels;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			return panels;
+			return null;
 		}
 		
 		
@@ -171,9 +176,11 @@ public class PanelHeader {
 			try {
 				PreparedStatement ps = con.prepareStatement(query);
 				ResultSet rs = ps.executeQuery();
+		      
 				panels = PanelHeader.setAllPanelsDetails(rs, panels);
 				rs.close();
 				ps.close();
+				return panels;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -191,13 +198,12 @@ public class PanelHeader {
 			PanelHeader panel = null;
 			String query = "select * from panelheader where PanelID = ?";
 			
-		
 			try {
 				PreparedStatement ps = con.prepareStatement(query);
 				ps.setInt(1, Integer.parseInt(panelID));
 				ResultSet rs = ps.executeQuery();
-				
 				panel = PanelHeader.setPanelDetails(rs, panel);
+				return panel;
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -243,19 +249,27 @@ public class PanelHeader {
 			
 		}
 		
-//		private static void setPanelTime(String startTime, String endTime) {
-//			con = Connect.getInstance();
-//			if (!con.isConnected()) {
-//				System.out.println("Failed to connect to Database");
-//				return;
-//			}
-//			
-//			String query = "UPDATE panelheader SET StartTime = ? AND EndTime = ? WHERE PanelID = ?";
-//			
-//		}
+		public static void setPanelTime(String startTime, String endTime, String panelID) {
+			con = Connect.getInstance();
+			if (!con.isConnected()) {
+				System.out.println("Failed to connect to Database");
+				return;
+			}
+			
+			String query = "UPDATE panelheader SET StartTime = ?, EndTime = ?  WHERE PanelID = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			try {
+				ps.setString(1, startTime);
+				ps.setString(2, endTime);
+				ps.setInt(3, Integer.parseInt(panelID));
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
 		
 		
-		public static void FinishPanel(String panelID) {
+		public static void finishPanel(String panelID) {
 			con = Connect.getInstance();
 			if (!con.isConnected()) {
 				System.out.println("Failed to connect to Database");
@@ -286,9 +300,12 @@ public class PanelHeader {
 			try {
 				PreparedStatement ps = con.prepareStatement(query);
 				ResultSet rs = ps.executeQuery();
+				
+		        
 				panels = PanelHeader.setAllPanelsDetails(rs, panels);
 				rs.close();
 				ps.close();
+				return panels;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -308,9 +325,12 @@ public class PanelHeader {
 			try {
 				PreparedStatement ps = con.prepareStatement(query);
 				ResultSet rs = ps.executeQuery();
+				
+		     
 				panels = PanelHeader.setAllPanelsDetails(rs, panels);
 				rs.close();
 				ps.close();
+				return panels;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -326,14 +346,17 @@ public class PanelHeader {
 			}
 			
 			Vector<PanelHeader> panels = new Vector<>();
-			String query = "SELECT * FROM panelheader WHERE ";
+			String query = "SELECT * FROM panelheader WHERE UserID = ?;";
 			try {
 				PreparedStatement ps = con.prepareStatement(query);
 				ps.setInt(1, Integer.parseInt(UserID));
 				ResultSet rs = ps.executeQuery();
+				
+	
 				panels = PanelHeader.setAllPanelsDetails(rs, panels);
 				rs.close();
 				ps.close();
+				return panels;
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -345,7 +368,6 @@ public class PanelHeader {
 
 			if (!con.isConnected()) {
 				System.out.println("Failed to connect to database");
-				return;
 			}
 			String query = "DELETE FROM panelheader WHERE UserID = ?;";
 			PreparedStatement ps = con.prepareStatement(query);
@@ -354,12 +376,11 @@ public class PanelHeader {
 				int rowsAffected = ps.executeUpdate();
 
 				if (rowsAffected > 0) {
-					System.out.println("Panels with InfluencerID " + userID + " successfully deleted");
+					System.out.println("Panels with InfluencerID " + userID + " successfully deleted"); 
 				} else {
 					System.out.println("Failed to delete panels with UserID " + userID);
 				}
 				
-				ps.close();
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {

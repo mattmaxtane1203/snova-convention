@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Vector;
 
+import model.PanelDetail;
 import model.PanelHeader;
 
 public class PanelController {
@@ -26,6 +27,15 @@ public class PanelController {
 		PanelHeader.addPanel(userID, panelTitle, panelDesc, location, startTime, endTime);
 		
 		return "Panel successfully added";
+	}
+	
+	public static String deleteAllPanelByInfluencer(String userID) {
+		if(PanelHeader.getAllPanelByInfluencer(userID).isEmpty()) {
+			return "Failed to delete, " + userID + " doesn't have any panel to delete";
+		}
+		PanelHeader.deleteAllPanelByInfluencer(userID);
+		
+		return "Succesfully deleted  all panel by, " + userID;
 	}
 	
 	
@@ -62,6 +72,11 @@ public class PanelController {
 			
 	}
 	
+	public static PanelHeader getPanel(String panelID) {
+		PanelHeader panel = PanelHeader.getPanel(panelID);
+		return panel;
+		
+	}
 	
 	public static Vector<PanelHeader> getAllFinishedPanels(){
 		Vector<PanelHeader> panels = PanelHeader.getAllFinishedPanels();
@@ -74,11 +89,37 @@ public class PanelController {
 	}
 	
 	public static String finishPanel(String panelID) {
-		PanelHeader.FinishPanel(panelID);
+		PanelHeader.finishPanel(panelID);
 		return "This panel is finished";
 	}
 	
 	
+	public static String attendPanel(String panelID, String userID) {
+		PanelHeader panel = getPanel(panelID);
+		if(panel.getIsFinished().equals("Finished")) {
+			return "Can't no longer attend, this panel already finished";
+		}
+		Vector<PanelDetail> panelsD = getAllAttendees(panelID);
+		for (PanelDetail panelDetail : panelsD) {
+			if(panelDetail.getUserID().equals(userID)) {
+				return "Already attended this panel";
+			}
+		}
+		PanelDetail.addAttendee(panelID, userID);
+		return "Succesfully attended this panel";
+	}
+	
+	public static Vector<PanelDetail> getAllAttendees(String panelID){
+		Vector<PanelDetail> panelsD = PanelDetail.getAllAttendees(panelID);
+		return panelsD;
+	}
+	
+	public static String deleteFanAttendance(String userID) {
+		PanelDetail.deleteFanAttendance(userID);
+		return "All attendance panel for this UserID " + userID + " has been deleted"; 
+	}
+	
+	//VALIDASI TAMBAHAN
 	private static Boolean hasTwoWords(String input) {
 		String[] words = input.split("\\s+");
 		if(words.length >= 2) {

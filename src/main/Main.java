@@ -66,13 +66,13 @@ public class Main extends Application {
 //		}
 //		System.out.println();
 		
-		//ADD PANEL
-		//String addPanel = PanelController.addPanel("12346", "Say no to drugs", "Ya gitulah", "Rumah saya", "11:20", "11:30");
-		//System.out.println(addPanel);
-		//System.out.println();
+//		ADD PANEL
+//		String addPanel = PanelController.addPanel("12348", "Embroidory", "Flower pattern", "Korea Utara", "12:20", "13:30");
+//		System.out.println(addPanel);
+//		System.out.println();
 		
 		//GET PANEL BY PANEL ID
-//		PanelHeader panel = PanelHeader.getPanel("3");
+//		PanelHeader panel = PanelHeader.getPanel("8");
 //		System.out.println(panel.getPanelID()+ " " + panel.getUserID()+ " " + 
 //				panel.getPanelTitle()+ " "+ panel.getPanelDesc()+ " "
 //				+ panel.getLocation() + " " + panel.getStartTime() + " "
@@ -114,7 +114,7 @@ public class Main extends Application {
 //		System.out.println();
 		
 		//DELETE PANEL BY INFLUENCER ID
-//		String deletePanel = PanelController.deleteAllPanelByInfluencer("12347");
+//		String deletePanel = PanelController.deleteAllPanelByInfluencer("12346");
 //		System.out.println(deletePanel);
 //		System.out.println();
 		
@@ -151,23 +151,16 @@ public class Main extends Application {
 //		String res = PanelController.deleteFanAttendance("12351");
 //		System.out.println(res);
 		
-		//DELETE PANEL DETAIL
-//		PanelDetail.delete("8");
-		
-		
-		
 //		//ADD TRANSACTION
-//		String res = TransactionController.addTransaction("12349", "2", 20);
+//		String res = TransactionController.addTransaction("12350", "3", 50);
 //		System.out.println(res);
-//		String res4 = TransactionController.addTransaction("12349", "3", 20);
-//		String res5 = TransactionController.addTransaction("12348", "3", 20);
 //		
 //		//deleteAllTransactionOfitem
-//		String res2 = TransactionController.deleteAllTransactionOfItem("1");
+//		String res2 = TransactionController.deleteAllTransactionOfItem("3");
 //		System.out.println(res2);
 //		
 //		//deleteAllTransactionbyFan
-//		String res3 = TransactionController.deleteAllTransactionByFan("12349");
+//		String res3 = TransactionController.deleteAllTransactionByFan("12350");
 //		System.out.println(res3);
 //		
 //		//GetTransactionByFan

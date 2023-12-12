@@ -20,11 +20,14 @@ public class TransactionController {
 		if(td.isEmpty())return "Item not available in any transaction.";
 		for (TransactionDetail detail : td) {
 			TransactionDetail.delete(detail.getTransactionID());
+			TransactionHeader.delete(detail.getTransactionID());
 		}
 		return "Succesfully delete all Transaction with ItemID" + itemID;
 	}
 	
 	public static String deleteAllTransactionByFan(String userID) {
+		Vector<TransactionHeader> transactions = TransactionHeader.getAllIDByUser(userID);
+		if(transactions.isEmpty())return "Failed to delete. Fan hasn't made any recent transaction.";
 		TransactionHeader.deleteAllTransactionByFan(userID);
 		return "Succesfully delete all Transaction with UserID" + userID;
 	}

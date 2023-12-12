@@ -30,16 +30,19 @@ public class PanelController {
 	}
 	
 	public static String deleteAllPanelByInfluencer(String userID) {
-		if(PanelHeader.getAllPanelByInfluencer(userID).isEmpty()) {
+		Vector<PanelHeader> panels = PanelHeader.getAllPanelByInfluencer(userID);
+		if(panels.isEmpty()) {
 			return "Failed to delete, " + userID + " doesn't have any panel to delete";
 		}
+		for (PanelHeader panel : panels) {
+			PanelDetail.delete(panel.getPanelID());
+		}
 		PanelHeader.deleteAllPanelByInfluencer(userID);
-		
-		return "Succesfully deleted  all panel by, " + userID;
+		return "Succesfully deleted  all panel by UserID " + userID;
 	}
 	
 	
-	public static String isValidPanelData(String panelTitle, String panelDesc, String location, String startTime, String endTime) {
+	private static String isValidPanelData(String panelTitle, String panelDesc, String location, String startTime, String endTime) {
 		if(panelTitle.equals("") || panelDesc.equals("")|| location.equals("")|| startTime.equals("")|| endTime.equals("")) {
 			return "Fields cannot be empty";
 		}

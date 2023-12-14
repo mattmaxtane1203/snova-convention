@@ -32,9 +32,8 @@ public class UserController {
 		User user = User.getUser(userID);
 		return user;
 	}
-
+	
 	public static String addUser(String username, String email, String password, String confirmPassword, String role) {
-		
 		String res = UserController.registrationInformationIsValid(username, email, password, confirmPassword, role);
 		
 		if(!res.equals("true")) {

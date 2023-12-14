@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Connect {
 	
@@ -42,6 +43,18 @@ public class Connect {
 		
 		try {
 			ps = con.prepareStatement(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return ps;
+	}
+	
+	public PreparedStatement prepareStatementGen(String query, int statement) {
+		PreparedStatement ps = null;
+		
+		try {
+			ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

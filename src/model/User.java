@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import db.Connect;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class User {
 
@@ -218,7 +220,7 @@ public class User {
 		}
 	}
 
-	public static Vector<User> getAllUserInRole(String role) {
+	public static ObservableList<User> getAllUserInRole(String role) {
 
 		con = Connect.getInstance();
 
@@ -226,7 +228,7 @@ public class User {
 			return null;
 		}
 
-		Vector<User> users = new Vector<>();
+		ObservableList<User> users = FXCollections.observableArrayList();
 		String query = "select * from user where Role = ?";
 
 		try {

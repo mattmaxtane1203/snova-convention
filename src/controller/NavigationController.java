@@ -3,6 +3,7 @@ package controller;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import model.User;
+import view.AdminFansPage;
 import view.AdminHomePage;
 import view.Init;
 import view.LoginPage;
@@ -28,8 +29,24 @@ public class NavigationController {
 		});
 	}
 	
-	public static void navigateAdminHomePage(Stage stage, User currentAdmin) {
+//	Admin Home Page
+	public static void navigateAdminHomePage(Stage stage, User currentAdmin) {		
 		new AdminHomePage(stage, currentAdmin);
+	}
+	
+	public static void navigateAdminHomePage(Button btn, Stage stage, User currentAdmin) {
+		btn.setOnMouseClicked(e -> {		
+			new AdminHomePage(stage, currentAdmin);
+		});
+	}
+	
+	public static void navigateAdminFansPage(Button btn, Stage stage, User currentAdmin) {
+		
+		System.out.println("Button pressed");
+		
+		btn.setOnMouseClicked(e -> {
+			new AdminFansPage(stage, currentAdmin);
+		});
 	}
 	
 }

@@ -2,9 +2,21 @@ package controller;
 
 import java.util.Vector;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
+import view.AdminFansPage;
 import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
@@ -47,8 +59,8 @@ public class UserController {
 		return "User successfully deleted";
 	}
 	
-	public static Vector<User> getAllUserInRole(String role) {
-		Vector<User> users = User.getAllUserInRole(role);
+	public static ObservableList<User> getAllUserInRole(String role) {
+		ObservableList<User> users = User.getAllUserInRole(role);
 		
 		return users;
 	}

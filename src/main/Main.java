@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import model.Item;
 import model.User;
+import view.AdminFansPage;
 import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
@@ -57,7 +58,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 //		new LoginPage(primaryStage);
-		new RegisterPage(primaryStage);
+//		new RegisterPage(primaryStage);
+		new AdminFansPage(primaryStage, UserController.getUser("2"));
 		
 		primaryStage.setTitle("SNova Convention");
 		primaryStage.show();

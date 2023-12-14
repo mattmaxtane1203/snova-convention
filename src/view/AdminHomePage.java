@@ -1,5 +1,6 @@
 package view;
 
+import controller.NavigationController;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -53,15 +54,15 @@ public class AdminHomePage {
 		mainScene = new Scene(homePane, 600, 600);
 	}
 	
-	private void actions(Stage stage) {
-		
+	private void actions(Stage stage, User currentAdmin) {
+		NavigationController.navigateAdminFansPage(viewFans, stage, currentAdmin);
 	}
 	
 	public AdminHomePage(Stage stage, User currentAdmin) {
 		init(currentAdmin);
 		styling();
 		layouting();
-		actions(stage);
+		actions(stage, currentAdmin);
 		stage.setScene(mainScene);
 	}
 

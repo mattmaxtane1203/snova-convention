@@ -20,7 +20,7 @@ public class AdminHomePage {
 	
 	Label title;
 	
-	Button viewFans, viewVendors, viewInfluencers;
+	Button viewFans, viewVendors, viewInfluencers, logout;
 	
 	private void init(User currentAdmin) {
 		homePane = new BorderPane();
@@ -34,6 +34,7 @@ public class AdminHomePage {
 		viewFans = new Button("View All Fans");
 		viewVendors = new Button("View All Vendors");
 		viewInfluencers = new Button("View All Influencers");
+		logout = new Button("Logout");
 	}
 	
 	private void styling() {
@@ -43,7 +44,7 @@ public class AdminHomePage {
 	private void layouting() {
 		title.setPadding(new Insets(0, 0, 10, 0));
 		
-		buttonBox.getChildren().addAll(viewFans, viewVendors, viewInfluencers);
+		buttonBox.getChildren().addAll(viewFans, viewVendors, viewInfluencers, logout);
 		
 		homeBox.getChildren().addAll(title, buttonBox);
 		
@@ -57,6 +58,8 @@ public class AdminHomePage {
 	private void actions(Stage stage, User currentAdmin) {
 		NavigationController.navigateAdminFansPage(viewFans, stage, currentAdmin);
 		NavigationController.navigateAdminVendorsPage(viewVendors, stage, currentAdmin);
+		NavigationController.navigateAdminInfluencersPage(viewInfluencers, stage, currentAdmin);
+		NavigationController.navigateLoginPage(logout, stage);
 	}
 	
 	public AdminHomePage(Stage stage, User currentAdmin) {

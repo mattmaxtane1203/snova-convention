@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import model.User;
 import view.AdminFansPage;
 import view.AdminHomePage;
+import view.AdminInfluencersPage;
 import view.AdminVendorsPage;
 import view.Init;
 import view.LoginPage;
@@ -53,10 +54,10 @@ public class NavigationController {
 		});
 	}
 	
-//	public static void navigateAdminInfluencersPage(Button btn, Stage stage, User currentAdmin) {
-//		btn.setOnMouseClicked(e -> {
-//			new AdminInfluencersPage(stage, currentAdmin);
-//		});
-//	}
+	public static void navigateAdminInfluencersPage(Button btn, Stage stage, User currentAdmin) {
+		btn.setOnMouseClicked(e -> {
+			new AdminInfluencersPage(stage, currentAdmin);
+		});
+	}
 	
 }

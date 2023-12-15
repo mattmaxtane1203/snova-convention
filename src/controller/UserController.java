@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
 import view.AdminFansPage;
+import view.AdminInfluencersPage;
 import view.AdminVendorsPage;
 import view.Init;
 import view.LoginPage;
@@ -268,7 +269,7 @@ public class UserController {
 					return;
 				}
 				
-//				AdminInfluencersPage.response.setText(res);
+				AdminInfluencersPage.response.setText(res);
 				return;
 			}
 			

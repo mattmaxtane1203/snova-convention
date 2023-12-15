@@ -29,7 +29,7 @@ public class NavigationController {
 		});
 	}
 	
-//	Admin Home Page
+//	Admin-related Pages
 	public static void navigateAdminHomePage(Stage stage, User currentAdmin) {		
 		new AdminHomePage(stage, currentAdmin);
 	}
@@ -41,9 +41,6 @@ public class NavigationController {
 	}
 	
 	public static void navigateAdminFansPage(Button btn, Stage stage, User currentAdmin) {
-		
-		System.out.println("Button pressed");
-		
 		btn.setOnMouseClicked(e -> {
 			new AdminFansPage(stage, currentAdmin);
 		});

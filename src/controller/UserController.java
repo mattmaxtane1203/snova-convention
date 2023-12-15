@@ -249,4 +249,27 @@ public class UserController {
 			return;
 		});
 	}
+
+	public static void deleteUserFromTable(Button btn, TableView table) {
+		btn.setOnMouseClicked(e -> {
+			User selectedUser = (User)table.getSelectionModel().getSelectedItem();
+			
+			if(selectedUser == null) {
+				AdminFansPage.response.setText("Please select a user to delete");
+				return;
+			}
+			
+			if(selectedUser.getRole().equals("Fan")) {
+				User.delete(selectedUser.getUserID());
+			}
+			
+			UserController.refreshTable(table, selectedUser.getRole());
+		});
+	}
+	
+	public static void refreshTable(TableView table, String role) {
+		ObservableList<User> users = UserController.getAllUserInRole(role);
+		
+		table.setItems(users);
+	}
 }

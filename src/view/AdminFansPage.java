@@ -4,6 +4,7 @@ import java.util.List;
 
 import controller.NavigationController;
 import controller.UserController;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,105 +23,81 @@ import model.User;
 
 public class AdminFansPage {
     
-    Scene mainScene;
-    
-    BorderPane fansPane;
-    
-    VBox listContainer;
-    
-    Label title, response;
-    
-    Button adminHomeBtn, deleteBtn;
-    
-    List<User> fanList;
-    ObservableList<User> fanOL;
-    
-    TableView<User> tableView;
-    TableColumn<User, Integer> userIDCol;
-    TableColumn<User, String> usernameCol;
-    TableColumn<User, String> emailCol;
-    TableColumn<User, String> passwordCol;
-    TableColumn<User, Void> deleteCol;
+	Scene allfanScene;
+	BorderPane allfanPane;
+	VBox allfanContainer;
+	VBox paneBox;
+	
+	// Table View & Columns
+	TableView allFanTable;
+	TableColumn<User, String> column1;
+	TableColumn<User, String> column2;	    
+	TableColumn<User, String> column3;	    	    
+	
+	// Delete Button
+	public static Label response;
+	Button deleteButton;
+	Button adminHomeButton;
 
-    private void init(Stage stage, User currentAdmin) {
-        tableView = new TableView<>();
-        
-        userIDCol = new TableColumn<>("UserID");
-        usernameCol = new TableColumn<>("Username");
-        emailCol = new TableColumn<>("Email");
-        passwordCol = new TableColumn<>("Password");
-        deleteCol = new TableColumn<>("Delete");
-        
-        userIDCol.setCellValueFactory(new PropertyValueFactory<>("UserID"));
-        usernameCol.setCellValueFactory(new PropertyValueFactory<>("Username"));
-        emailCol.setCellValueFactory(new PropertyValueFactory<>("Email"));
-        passwordCol.setCellValueFactory(new PropertyValueFactory<>("Password"));
-        
-        deleteCol.setCellFactory(col -> new TableCell<User, Void>() {
-            private final Button deleteButton = new Button("Delete");
+    private void init() {
+    	allfanPane = new BorderPane();
+    	allfanContainer = new VBox(10);
+    	paneBox = new VBox();
+    	
+    	allFanTable = new TableView();
+    	column1 = new TableColumn<>("UserID");
+    	column2 = new TableColumn<>("Username");	    
+    	column3 = new TableColumn<>("Email");	    	    
+    	
+    	response = new Label("");
+    	deleteButton = new Button("Delete");
+    	adminHomeButton = new Button("Return to Home");
+    	
+    	column1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUserID()));
+		column2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+		column3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
 
-            {
-                deleteButton.setOnAction((ActionEvent event) -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    String res = UserController.deleteFan(user.getUserID());
-
-                    if (!res.equals("User successfully deleted")) {
-                        response.setText(res);
-                    }
-                    
-                    new AdminFansPage(stage, currentAdmin);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(deleteButton);
-                }
-            }
-        });
-
-        tableView.getColumns().addAll(userIDCol, usernameCol, emailCol, passwordCol, deleteCol);
-
-        fanList = UserController.getAllUserInRole("Fan");
-        fanOL = FXCollections.observableArrayList(fanList);
-        tableView.setItems(fanOL);
-
-        fansPane = new BorderPane();
-
-        listContainer = new VBox();
-
-        title = new Label("View All Fans");
-
-        adminHomeBtn = new Button("Back to Home");
-
-        mainScene = new Scene(fansPane, 600, 600);
+		allFanTable.getColumns().addAll(column1, column2, column3);
+	    
+	    ObservableList<User> users = UserController.getAllUserInRole("Fan");
+			    
+	    allFanTable.setItems(users);
     }
 
     private void layouting() {
-        listContainer.getChildren().addAll(title, tableView, adminHomeBtn);
-        listContainer.setAlignment(Pos.CENTER);
-
-        fansPane.setCenter(listContainer);
+    	allfanContainer.getChildren().addAll(allFanTable, 
+    			response, deleteButton, adminHomeButton);
+		paneBox.getChildren().add(allfanContainer);
+		allfanPane.setCenter(paneBox);
+		
+		allfanScene  = new Scene(allfanPane, 600, 600);
     }
 
     private void styling() {
-
+    	allFanTable.setMaxWidth(600);
+		
+		column1.setPrefWidth(100);
+		column2.setPrefWidth(200);
+		column3.setPrefWidth(300);
+		
+		column1.setResizable(false);
+		column2.setResizable(false);
+		column3.setResizable(false);
     }
 
     private void actions(Stage stage, User currentAdmin) {
-    	NavigationController.navigateAdminHomePage(adminHomeBtn, stage, currentAdmin);
+    	NavigationController.navigateAdminHomePage(adminHomeButton, stage, currentAdmin);
+    	UserController.deleteUserFromTable(deleteButton, allFanTable);
     }
 
     public AdminFansPage(Stage stage, User currentAdmin) {
-        init(stage, currentAdmin);
-        styling();
-        layouting();
-        actions(stage, currentAdmin);
-        stage.setScene(mainScene);
+		init();
+		layouting();
+		styling();
+		actions(stage, currentAdmin);
+		
+		stage.setTitle("All Fan Account");
+		stage.setResizable(false);
+		stage.setScene(allfanScene);
     }
 }

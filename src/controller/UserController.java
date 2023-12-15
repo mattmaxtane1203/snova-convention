@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
 import view.AdminFansPage;
+import view.AdminVendorsPage;
 import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
@@ -250,19 +251,28 @@ public class UserController {
 		});
 	}
 
-	public static void deleteUserFromTable(Button btn, TableView table) {
+	public static void deleteUserFromTable(Button btn, TableView table, String currentRole) {
 		btn.setOnMouseClicked(e -> {
 			User selectedUser = (User)table.getSelectionModel().getSelectedItem();
 			
 			if(selectedUser == null) {
-				AdminFansPage.response.setText("Please select a user to delete");
+				String res = "Please select a user to delete";
+				
+				if(currentRole.equals("Fan")) {
+					AdminFansPage.response.setText(res);
+					return;					
+				}
+				
+				if(currentRole.equals("Vendor")) {
+					AdminVendorsPage.response.setText(res);
+					return;
+				}
+				
+//				AdminInfluencersPage.response.setText(res);
 				return;
 			}
 			
-			if(selectedUser.getRole().equals("Fan")) {
-				User.delete(selectedUser.getUserID());
-			}
-			
+			User.delete(selectedUser.getUserID());
 			UserController.refreshTable(table, selectedUser.getRole());
 		});
 	}

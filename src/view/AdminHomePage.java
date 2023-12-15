@@ -56,6 +56,7 @@ public class AdminHomePage {
 	
 	private void actions(Stage stage, User currentAdmin) {
 		NavigationController.navigateAdminFansPage(viewFans, stage, currentAdmin);
+		NavigationController.navigateAdminVendorsPage(viewVendors, stage, currentAdmin);
 	}
 	
 	public AdminHomePage(Stage stage, User currentAdmin) {

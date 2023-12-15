@@ -21,15 +21,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
 
-public class AdminFansPage {
+public class AdminVendorsPage {
     
-	Scene allfanScene;
-	BorderPane allfanPane;
-	VBox allfanContainer;
+	Scene allVendorScene;
+	BorderPane allVendorPane;
+	VBox allVendorContainer;
 	VBox paneBox;
 	
 	// Table View & Columns
-	TableView allFanTable;
+	TableView allVendorTable;
 	TableColumn<User, String> column1;
 	TableColumn<User, String> column2;	    
 	TableColumn<User, String> column3;	    	    
@@ -40,11 +40,11 @@ public class AdminFansPage {
 	Button adminHomeButton;
 
     private void init() {
-    	allfanPane = new BorderPane();
-    	allfanContainer = new VBox(10);
+    	allVendorPane = new BorderPane();
+    	allVendorContainer = new VBox(10);
     	paneBox = new VBox();
     	
-    	allFanTable = new TableView();
+    	allVendorTable = new TableView();
     	column1 = new TableColumn<>("UserID");
     	column2 = new TableColumn<>("Username");	    
     	column3 = new TableColumn<>("Email");	    	    
@@ -57,24 +57,24 @@ public class AdminFansPage {
 		column2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
 		column3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
 
-		allFanTable.getColumns().addAll(column1, column2, column3);
+		allVendorTable.getColumns().addAll(column1, column2, column3);
 	    
-	    ObservableList<User> users = UserController.getAllUserInRole("Fan");
+	    ObservableList<User> users = UserController.getAllUserInRole("Vendor");
 			    
-	    allFanTable.setItems(users);
+	    allVendorTable.setItems(users);
     }
 
     private void layouting() {
-    	allfanContainer.getChildren().addAll(allFanTable, 
+    	allVendorContainer.getChildren().addAll(allVendorTable, 
     			response, deleteButton, adminHomeButton);
-		paneBox.getChildren().add(allfanContainer);
-		allfanPane.setCenter(paneBox);
+		paneBox.getChildren().add(allVendorContainer);
+		allVendorPane.setCenter(paneBox);
 		
-		allfanScene  = new Scene(allfanPane, 600, 600);
+		allVendorScene  = new Scene(allVendorPane, 600, 600);
     }
 
     private void styling() {
-    	allFanTable.setMaxWidth(600);
+    	allVendorTable.setMaxWidth(600);
 		
 		column1.setPrefWidth(100);
 		column2.setPrefWidth(200);
@@ -87,17 +87,17 @@ public class AdminFansPage {
 
     private void actions(Stage stage, User currentAdmin) {
     	NavigationController.navigateAdminHomePage(adminHomeButton, stage, currentAdmin);
-    	UserController.deleteUserFromTable(deleteButton, allFanTable, "Fan");
+    	UserController.deleteUserFromTable(deleteButton, allVendorTable, "Vendor");
     }
 
-    public AdminFansPage(Stage stage, User currentAdmin) {
+    public AdminVendorsPage(Stage stage, User currentAdmin) {
 		init();
 		layouting();
 		styling();
 		actions(stage, currentAdmin);
 		
-		stage.setTitle("All Fan Account");
+		stage.setTitle("All Vendor Account");
 		stage.setResizable(false);
-		stage.setScene(allfanScene);
+		stage.setScene(allVendorScene);
     }
 }

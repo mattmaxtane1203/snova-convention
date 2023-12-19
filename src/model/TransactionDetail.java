@@ -6,14 +6,16 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import db.Connect;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class TransactionDetail {
 	private static Connect con;
 	private String transactionID;
 	private String itemID;
-	private int quantity;
+	private Integer quantity;
 	
-	public TransactionDetail(String transactionID, String itemID, int quantity) {
+	public TransactionDetail(String transactionID, String itemID, Integer quantity) {
 		super();
 		this.transactionID = transactionID;
 		this.itemID = itemID;
@@ -32,7 +34,7 @@ public class TransactionDetail {
 	public void setItemID(String itemID) {
 		this.itemID = itemID;
 	}
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 	public void setQuantity(Integer quantity) {
@@ -66,14 +68,14 @@ public class TransactionDetail {
 		}
 	}
 	
-	public static Vector<TransactionDetail> getAllIDByItem(String itemID){
+	public static ObservableList<TransactionDetail> getAllIDByItem(String itemID){
 		con = Connect.getInstance();
 
 		if (!con.isConnected()) {
 			return null;
 		}
 		
-		Vector<TransactionDetail> td = new Vector<>();
+		ObservableList<TransactionDetail> td = FXCollections.observableArrayList();
 		String query = "select * from transactiondetail where ItemID = ?;";
 		
 		String currTransactionID;
@@ -131,14 +133,14 @@ public class TransactionDetail {
 	}
 	
 	
-	public static Vector<TransactionDetail> getTransacationByFan(String userID){
+	public static ObservableList<TransactionDetail> getTransacationByFan(String userID){
 		 con = Connect.getInstance();
 
 		    if (!con.isConnected()) {
 		        return null;
 		    }
 
-		    Vector<TransactionDetail> td = new Vector<>();
+		    ObservableList<TransactionDetail> td = FXCollections.observableArrayList();
 		    String query = "SELECT td.TransactionID, td.ItemID, td.Quantity " +
 		                   "FROM transactiondetail td " +
 		                   "JOIN transactionheader th ON td.TransactionID = th.TransactionID " +
@@ -168,14 +170,14 @@ public class TransactionDetail {
 	}
 	
 	
-	public static Vector<TransactionDetail> getTransacationDetail(String transactionID){
+	public static ObservableList<TransactionDetail> getTransacationDetail(String transactionID){
 		con = Connect.getInstance();
 
 		if (!con.isConnected()) {
 			return null;
 		}
 		
-		Vector<TransactionDetail> td = new Vector<>();
+		ObservableList<TransactionDetail> td = FXCollections.observableArrayList();
 		String query = "select * from transactiondetail where TransactionID = ?;";
 		
 		String currTransactionID;

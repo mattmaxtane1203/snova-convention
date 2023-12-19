@@ -3,6 +3,7 @@ package view;
 import java.math.BigDecimal;
 
 import controller.ItemController;
+import controller.NavigationController;
 import controller.UserController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -42,6 +43,7 @@ public class FanVendorPage {
 
 	public static Label mainResponse = new Label("");
 	Button detail = new Button("Detail");
+	Button back = new Button("Back");
 	
 	public static Label popupResponse = new Label("");
 	Button buyButton = new Button("Buy Item");
@@ -90,7 +92,7 @@ public class FanVendorPage {
             }
         });
 		
-		allVendorContainer.getChildren().addAll(allVendorTable, allItemTable, mainResponse, detail);
+		allVendorContainer.getChildren().addAll(allVendorTable, allItemTable, mainResponse, detail, back);
 		paneBox.getChildren().add(allVendorContainer);
 		allVendorPane.setCenter(paneBox);
 
@@ -158,7 +160,8 @@ public class FanVendorPage {
         popupStage.show();
     }
 
-	private void action() {
+	private void action(Stage stage, User currentUser) {
+		NavigationController.navigateFanHomePage(back, stage, currentUser);
 		detail.setOnMouseClicked(e -> itemDetail());
 	}
 
@@ -167,7 +170,7 @@ public class FanVendorPage {
 		
 		init();
 		styling();
-		action();
+		action(stage, currentUser);
 		
 		stage.setTitle("All Vendor");
 		stage.setResizable(false);

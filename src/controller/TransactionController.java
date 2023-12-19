@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Vector;
 
+import javafx.collections.ObservableList;
 import model.TransactionDetail;
 import model.TransactionHeader;
 
@@ -16,7 +17,7 @@ public class TransactionController {
 	}
 	
 	public static String deleteAllTransactionOfItem(String itemID) {
-		Vector<TransactionDetail> td = TransactionDetail.getAllIDByItem(itemID);
+		ObservableList<TransactionDetail> td = TransactionDetail.getAllIDByItem(itemID);
 		if(td.isEmpty())return "Item not available in any transaction.";
 		for (TransactionDetail detail : td) {
 			TransactionDetail.delete(detail.getTransactionID());
@@ -32,8 +33,8 @@ public class TransactionController {
 		return "Succesfully delete all Transaction with UserID" + userID;
 	}
 	
-	public static Vector<TransactionDetail> getTransactionByFan(String userID) {
-		Vector<TransactionDetail> td = TransactionDetail.getTransacationByFan(userID);
+	public static ObservableList<TransactionDetail> getTransactionByFan(String userID) {
+		ObservableList<TransactionDetail> td = TransactionDetail.getTransacationByFan(userID);
 		return td;
 	}
 }

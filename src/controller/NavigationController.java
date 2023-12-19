@@ -9,6 +9,7 @@ import view.AdminInfluencersPage;
 import view.AdminVendorsPage;
 import view.FanHomePage;
 import view.FanPanelPage;
+import view.FanTransactionPage;
 import view.FanVendorPage;
 import view.Init;
 import view.LoginPage;
@@ -79,6 +80,12 @@ public class NavigationController {
 	public static void navigateFanVendorPage(Button btn, Stage stage, User currentUser) {
 		btn.setOnMouseClicked(e -> {
 			new FanVendorPage(stage, currentUser);
+		});
+	}
+	
+	public static void navigateFanTransactionPage(Button btn, Stage stage, User currentUser) {
+		btn.setOnMouseClicked(e -> {
+			new FanTransactionPage(stage, currentUser);
 		});
 	}
 }

@@ -1,5 +1,6 @@
 package main;
 
+import controller.TransactionController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.User;
@@ -11,13 +12,14 @@ import view.RegisterPage;
 public class Main extends Application {
 
 	public Main() {
-		
+//		String res = TransactionController.addTransaction("26", "22", 1);
+//		System.out.println(res);
 	}
 
 	public static void main(String[] args) {
 //		SWITCH THESE WHEN TESTING VIEWS AND CONTROLLERS
 		
-		//new Main();
+//		new Main();
 		launch(args);
 	}
 

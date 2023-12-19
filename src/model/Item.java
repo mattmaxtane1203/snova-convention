@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import db.Connect;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Item {
 	
@@ -68,12 +70,12 @@ public class Item {
 		System.out.println(itemID + " " + userID + " " + itemName + " " + itemDescription + " " + price);
 	}
 
-	private static Vector<Item> convertMultipleResultSet(ResultSet rs) {
+	private static ObservableList<Item> convertMultipleResultSet(ResultSet rs) {
 		
 		String currItemID, currUserID, currItemName, currItemDescription;
 		BigDecimal currPrice;
 		
-		Vector<Item> items = new Vector<>();
+		ObservableList<Item> items = FXCollections.observableArrayList();
 		
 		try {
 			while(rs.next()) {
@@ -120,14 +122,39 @@ public class Item {
 		return null;
 	}
 	
-	public static Vector<Item> getAllItems(String userID) {
+	public static ObservableList<Item> getAllItems() {
 		con = Connect.getInstance();
 		
 		if(!con.isConnected()) {
 			return null;
 		}
 		
-		Vector<Item> items = new Vector<>();
+		ObservableList<Item> items = FXCollections.observableArrayList();
+		String query = "select * from item";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ResultSet rs = ps.executeQuery();
+			
+			items = Item.convertMultipleResultSet(rs);
+			
+			return items;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public static ObservableList<Item> getAllItemsByVendor(String userID) {
+con = Connect.getInstance();
+		
+		if(!con.isConnected()) {
+			return null;
+		}
+		
+		ObservableList<Item> items = FXCollections.observableArrayList();
 		String query = "select * from item where UserID = ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		try {

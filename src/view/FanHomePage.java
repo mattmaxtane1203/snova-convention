@@ -47,6 +47,7 @@ public class FanHomePage {
 	
 	private void actions(Stage stage, User currentUser) {
 		NavigationController.navigateFanPanelPage(panelsButton, stage, currentUser);
+		NavigationController.navigateFanVendorPage(vendorsButton, stage, currentUser);
 	}
 
 	public FanHomePage(Stage stage, User currentUser) {

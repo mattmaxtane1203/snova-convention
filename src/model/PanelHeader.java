@@ -3,9 +3,13 @@ package model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 import db.Connect;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class PanelHeader {
 		
@@ -15,12 +19,12 @@ public class PanelHeader {
 		private String panelTitle;
 		private String panelDesc;
 		private String location;
-		private String startTime;
-		private String endTime;
+		private LocalDateTime startTime;
+		private LocalDateTime endTime;
 		private String isFinished;
 		
-		public PanelHeader(String panelID, String userID, String panelTitle, String panelDesc, String location, String startTime,
-				String endTime, String isFinished) {
+		public PanelHeader(String panelID, String userID, String panelTitle, String panelDesc, String location, LocalDateTime startTime,
+				LocalDateTime endTime, String isFinished) {
 			this.panelID = panelID;
 			this.userID = userID;
 			this.panelTitle = panelTitle;
@@ -67,19 +71,19 @@ public class PanelHeader {
 			this.location = location;
 		}
 
-		public String getStartTime() {
+		public LocalDateTime getStartTime() {
 			return startTime;
 		}
 
-		public void setStartTime(String startTime) {
+		public void setStartTime(LocalDateTime startTime) {
 			this.startTime = startTime;
 		}
 
-		public String getEndTime() {
+		public LocalDateTime getEndTime() {
 			return endTime;
 		}
 
-		public void setEndTime(String endTime) {
+		public void setEndTime(LocalDateTime endTime) {
 			this.endTime = endTime;
 		}
 
@@ -98,8 +102,8 @@ public class PanelHeader {
 			String currTitle;
 			String currDesc;
 			String currLocation;
-			String currStartTime;
-			String currEndTime;
+			LocalDateTime currStartTime;
+			LocalDateTime currEndTime;
 			Boolean checkIsFinished;
 			String currIsFinished;
 
@@ -110,8 +114,11 @@ public class PanelHeader {
 					currTitle = rs.getString("PanelTitle");
 					currDesc = rs.getString("PanelDescription");
 					currLocation = rs.getString("Location");
-					currStartTime = rs.getString("StartTime");
-					currEndTime = rs.getString("EndTime");
+					
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	                currStartTime = LocalDateTime.parse(rs.getString("StartTime"), formatter);
+	                currEndTime = LocalDateTime.parse(rs.getString("EndTime"), formatter);
+	                
 					checkIsFinished = rs.getBoolean("IsFinished");
 					if(checkIsFinished.equals(true)) currIsFinished = "Finished";
 					else currIsFinished = "Not started";
@@ -126,15 +133,15 @@ public class PanelHeader {
 			return null;
 		}
 		
-		private static Vector<PanelHeader> setAllPanelsDetails(ResultSet rs, Vector<PanelHeader> panels) {
+		private static ObservableList<PanelHeader> setAllPanelsDetails(ResultSet rs, ObservableList<PanelHeader> panels) {
 			try {
 				String currPanelID;
 				String currUserID;
 				String currTitle;
 				String currDesc;
 				String currLocation;
-				String currStartTime;
-				String currEndTime;
+				LocalDateTime currStartTime;
+				LocalDateTime currEndTime;
 				Boolean checkIsFinished;
 				String currIsFinished;
 				while (rs.next()) {
@@ -143,8 +150,11 @@ public class PanelHeader {
 					currTitle = rs.getString("PanelTitle");
 					currDesc = rs.getString("PanelDescription");
 					currLocation = rs.getString("Location");
-					currStartTime = rs.getString("StartTime");
-					currEndTime = rs.getString("EndTime");
+					
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	                currStartTime = LocalDateTime.parse(rs.getString("StartTime"), formatter);
+	                currEndTime = LocalDateTime.parse(rs.getString("EndTime"), formatter);
+	                
 					checkIsFinished = rs.getBoolean("IsFinished");
 					if(checkIsFinished.equals(true)) currIsFinished = "Finished";
 					else currIsFinished = "Not started";
@@ -163,14 +173,14 @@ public class PanelHeader {
 		}
 		
 		
-		public static Vector<PanelHeader> getAllPanels(){
+		public static ObservableList<PanelHeader> getAllPanels(){
 			con = Connect.getInstance();
 
 			if (!con.isConnected()) {
 				return null;
 			}
 			
-			Vector<PanelHeader> panels = new Vector<>();
+			ObservableList<PanelHeader> panels = FXCollections.observableArrayList();
 			String query = "select * from panelheader";
 			
 			try {
@@ -212,7 +222,8 @@ public class PanelHeader {
 			
 			return null;
 		}
-		
+
+//		TODO: Check parameter if need to change to DateTime
 		public static void addPanel(String influencerID, String panelTitle, String panelDesc, String location, String startTime, String endTime) {
 			con = Connect.getInstance();
 			if (!con.isConnected()) {
@@ -249,6 +260,7 @@ public class PanelHeader {
 			
 		}
 		
+//		TODO: Check parameter if need to change to DateTime
 		public static void setPanelTime(String startTime, String endTime, String panelID) {
 			con = Connect.getInstance();
 			if (!con.isConnected()) {
@@ -288,14 +300,14 @@ public class PanelHeader {
 		}
 		
 		
-		public static Vector<PanelHeader> getAllUnFinishedPanels(){
+		public static ObservableList<PanelHeader> getAllUnFinishedPanels(){
 			con = Connect.getInstance();
 
 			if (!con.isConnected()) {
 				return null;
 			}
 			
-			Vector<PanelHeader> panels = new Vector<>();
+			ObservableList<PanelHeader> panels = FXCollections.observableArrayList();
 			String query = "SELECT * FROM panelheader WHERE IsFinished = 0";
 			try {
 				PreparedStatement ps = con.prepareStatement(query);
@@ -313,14 +325,14 @@ public class PanelHeader {
 			return null;		
 		}
 		
-		public static Vector<PanelHeader> getAllFinishedPanels(){
+		public static ObservableList<PanelHeader> getAllFinishedPanels(){
 			con = Connect.getInstance();
 
 			if (!con.isConnected()) {
 				return null;
 			}
 			
-			Vector<PanelHeader> panels = new Vector<>();
+			ObservableList<PanelHeader> panels = FXCollections.observableArrayList();
 			String query = "SELECT * FROM panelheader WHERE IsFinished = 1";
 			try {
 				PreparedStatement ps = con.prepareStatement(query);
@@ -338,14 +350,14 @@ public class PanelHeader {
 			return null;		
 		}
 		
-		public static Vector<PanelHeader> getAllPanelByInfluencer(String UserID){
+		public static ObservableList<PanelHeader> getAllPanelByInfluencer(String UserID){
 			con = Connect.getInstance();
 
 			if (!con.isConnected()) {
 				return null;
 			}
 			
-			Vector<PanelHeader> panels = new Vector<>();
+			ObservableList<PanelHeader> panels = FXCollections.observableArrayList();
 			String query = "SELECT * FROM panelheader WHERE UserID = ?;";
 			try {
 				PreparedStatement ps = con.prepareStatement(query);

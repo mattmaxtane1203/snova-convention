@@ -5,14 +5,18 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Vector;
 
+import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import model.PanelDetail;
 import model.PanelHeader;
+import model.User;
+import view.FanPanelPage;
 
 public class PanelController {
 	
 	
-	public static Vector<PanelHeader> getAllPanels(){
-		Vector<PanelHeader> panels = PanelHeader.getAllPanels();
+	public static ObservableList<PanelHeader> getAllPanels(){
+		ObservableList<PanelHeader> panels = PanelHeader.getAllPanels();
 		return panels;
 	}
 	
@@ -30,7 +34,7 @@ public class PanelController {
 	}
 	
 	public static String deleteAllPanelByInfluencer(String userID) {
-		Vector<PanelHeader> panels = PanelHeader.getAllPanelByInfluencer(userID);
+		ObservableList<PanelHeader> panels = PanelHeader.getAllPanelByInfluencer(userID);
 		if(panels.isEmpty()) {
 			return "Failed to delete, " + userID + " doesn't have any panel to delete";
 		}
@@ -81,13 +85,13 @@ public class PanelController {
 		
 	}
 	
-	public static Vector<PanelHeader> getAllFinishedPanels(){
-		Vector<PanelHeader> panels = PanelHeader.getAllFinishedPanels();
+	public static ObservableList<PanelHeader> getAllFinishedPanels(){
+		ObservableList<PanelHeader> panels = PanelHeader.getAllFinishedPanels();
 		return panels;
 	}
 	
-	public static Vector<PanelHeader> getAllUnfinishedPanels(){
-		Vector<PanelHeader> panels = PanelHeader.getAllUnFinishedPanels();
+	public static ObservableList<PanelHeader> getAllUnfinishedPanels(){
+		ObservableList<PanelHeader> panels = PanelHeader.getAllUnFinishedPanels();
 		return panels;
 	}
 	
@@ -120,6 +124,13 @@ public class PanelController {
 	public static String deleteFanAttendance(String userID) {
 		PanelDetail.deleteFanAttendance(userID);
 		return "All attendance panel for this UserID " + userID + " has been deleted"; 
+	}
+	
+	public static void attendAction(Button attendBtn, PanelHeader selectedPanel, User currentUser) {
+		attendBtn.setOnAction(e -> {
+	        String res = PanelController.attendPanel(selectedPanel.getPanelID(), currentUser.getUserID());
+	        FanPanelPage.response.setText(res);
+	    });
 	}
 	
 	//VALIDASI TAMBAHAN

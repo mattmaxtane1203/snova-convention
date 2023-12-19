@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import db.Connect;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class PanelDetail {
 	
@@ -57,14 +59,14 @@ public class PanelDetail {
 		
 	}
 	
-	public static Vector<PanelDetail> getAllAttendees(String panelID){
+	public static ObservableList<PanelDetail> getAllAttendees(String panelID){
 		con = Connect.getInstance();
 
 		if (!con.isConnected()) {
 			return null;
 		}
 		
-		Vector<PanelDetail> panelDetail = new Vector<>();
+		ObservableList<PanelDetail> panelDetail = FXCollections.observableArrayList();
 		String query = "select * from paneldetail where PanelID = ?;";
 		
 		String currPanelID;

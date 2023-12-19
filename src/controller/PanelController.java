@@ -1,16 +1,20 @@
 package controller;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Vector;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import model.PanelDetail;
 import model.PanelHeader;
 import model.User;
 import view.FanPanelPage;
+import view.InfluencerHomePage;
 
 public class PanelController {
 	
@@ -20,17 +24,22 @@ public class PanelController {
 		return panels;
 	}
 	
-	public static String addPanel(String userID, String panelTitle, String panelDesc, String location, String startTime, String endTime) {
+	public static void addPanel(User currentUser, LocalDateTime startTime, LocalDateTime endTime) {
 		
-		String validate = PanelController.isValidPanelData(panelTitle, panelDesc, location, startTime, endTime);
+		String panelTitle = InfluencerHomePage.titleField.getText();
+		String panelDesc = InfluencerHomePage.descField.getText();
+		String location = InfluencerHomePage.locField.getText();
 		
-		if(!validate.equals("true")) {
-			return validate;
+		String res = PanelController.isValidPanelData(panelTitle, panelDesc, location, startTime, endTime);
+		
+		if(!res.equals("true")) {
+			InfluencerHomePage.createPanelRes.setText(res);
+			return;
 		}
 		
-		PanelHeader.addPanel(userID, panelTitle, panelDesc, location, startTime, endTime);
+		PanelHeader.addPanel(currentUser.getUserID(), panelTitle, panelDesc, location, startTime, endTime);
 		
-		return "Panel successfully added";
+		InfluencerHomePage.createPanelRes.setText(res);;
 	}
 	
 	public static String deleteAllPanelByInfluencer(String userID) {
@@ -45,40 +54,32 @@ public class PanelController {
 		return "Succesfully deleted  all panel by UserID " + userID;
 	}
 	
-	
-	private static String isValidPanelData(String panelTitle, String panelDesc, String location, String startTime, String endTime) {
-		if(panelTitle.equals("") || panelDesc.equals("")|| location.equals("")|| startTime.equals("")|| endTime.equals("")) {
-			return "Fields cannot be empty";
-		}
-		
-		if(panelDesc.length()>250) {
-			return "Max description length is 250 characters long";
-		}
-		
-		Boolean validateLocation = PanelController.hasTwoWords(location);
-		if(validateLocation == false) {
-			return "Location must be at least 2 words long.";
-		}
-		
-		Boolean validateTimeStart = PanelController.isValidateTime(startTime, 9, 21);
-		if(validateTimeStart == false) {
-			return "Start time must be between 09:00-21:00";
-		}
-		
-		Boolean validateTimeEnd = PanelController.isValidateTime(endTime, 9, 23);
-		if(validateTimeEnd == false) {
-			return "End time must be between 09:00-23:00";
-		}
-		
-		Boolean validateAboveTime = PanelController.isAboveStartTime(startTime, endTime);
-		if(validateAboveTime == false) {
-			return "End time must be above Start Time";
-		}
-		
-		return "true";
-			
+	private static String isValidPanelData(String panelTitle, String panelDesc, String location, LocalDateTime startTime, LocalDateTime endTime) {
+	    if (panelTitle.equals("") || panelDesc.equals("") || location.equals("")) {
+	        return "Fields cannot be empty";
+	    }
+
+	    if (panelDesc.length() > 250) {
+	        return "Max description length is 250 characters long";
+	    }
+
+	    if (!PanelController.hasTwoWords(location)) {
+	        return "Location must be at least 2 words long.";
+	    }
+
+	    LocalDateTime now = LocalDateTime.now();
+
+	    if (startTime.isBefore(now)) {
+	        return "Start time must be later than the current time.";
+	    }
+
+	    if (startTime.isAfter(endTime)) {
+	        return "Start time cannot be later than end time.";
+	    }
+
+	    return "Panel added successfully";
 	}
-	
+
 	public static PanelHeader getPanel(String panelID) {
 		PanelHeader panel = PanelHeader.getPanel(panelID);
 		return panel;
@@ -95,9 +96,18 @@ public class PanelController {
 		return panels;
 	}
 	
-	public static String finishPanel(String panelID) {
+	public static ObservableList<PanelHeader> getAllFinishedPanelsByInfluencer(String userID){
+		ObservableList<PanelHeader> panels = PanelHeader.getAllFinishedPanelsByInfluencer(userID);
+		return panels;
+	}
+	
+	public static ObservableList<PanelHeader> getAllUnfinishedPanelsByInfluencer(String userID){
+		ObservableList<PanelHeader> panels = PanelHeader.getAllUnFinishedPanelsByInfluencer(userID);
+		return panels;
+	}
+	
+	public static void finishPanel(String panelID) {
 		PanelHeader.finishPanel(panelID);
-		return "This panel is finished";
 	}
 	
 	
@@ -106,7 +116,7 @@ public class PanelController {
 		if(panel.getIsFinished().equals("Finished")) {
 			return "Can't no longer attend, this panel already finished";
 		}
-		Vector<PanelDetail> panelsD = getAllAttendees(panelID);
+		ObservableList<PanelDetail> panelsD = getAllAttendees(panelID);
 		for (PanelDetail panelDetail : panelsD) {
 			if(panelDetail.getUserID().equals(userID)) {
 				return "Already attended this panel";
@@ -116,8 +126,8 @@ public class PanelController {
 		return "Succesfully attended this panel";
 	}
 	
-	public static Vector<PanelDetail> getAllAttendees(String panelID){
-		Vector<PanelDetail> panelsD = PanelDetail.getAllAttendees(panelID);
+	public static ObservableList<PanelDetail> getAllAttendees(String panelID){
+		ObservableList<PanelDetail> panelsD = PanelDetail.getAllAttendees(panelID);
 		return panelsD;
 	}
 	
@@ -133,6 +143,32 @@ public class PanelController {
 	    });
 	}
 	
+	public static void refreshTable(String userID) {
+		InfluencerHomePage.upcomingPanelTable.setItems(getAllUnfinishedPanelsByInfluencer(userID));
+		InfluencerHomePage.finishedPanelTable.setItems(getAllFinishedPanelsByInfluencer(userID));
+	}
+	
+	public static void handleCreatePanel(Button btn, User currentUser) {
+		btn.setOnMouseClicked(e -> {
+			
+			LocalDateTime startDateTime = LocalDateTime.of(InfluencerHomePage.startDatePicker.getValue(), parseTime(InfluencerHomePage.startTimeField.getText()));
+            LocalDateTime endDateTime = LocalDateTime.of(InfluencerHomePage.endDatePicker.getValue(), parseTime(InfluencerHomePage.endTimeField.getText()));
+            
+            addPanel(currentUser, startDateTime, endDateTime);
+            refreshTable(currentUser.getUserID());
+		});
+	}
+	
+	public static LocalTime parseTime(String timeString) {
+	    try {
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+	        return LocalTime.parse(timeString, formatter);
+	    } catch (DateTimeParseException e) {
+	    	InfluencerHomePage.createPanelRes.setText("Please fix time format to HH:mm");
+	        return null;
+	    }
+	}
+	
 	//VALIDASI TAMBAHAN
 	private static Boolean hasTwoWords(String input) {
 		String[] words = input.split("\\s+");
@@ -140,35 +176,6 @@ public class PanelController {
 			return true;
 		}
 		return false;
-	}
-	
-	private static Boolean isValidateTime(String time, int start, int end) {
-		try {
-			LocalTime tempTime = LocalTime.parse(time);
-			LocalTime startTime = LocalTime.of(start, 0);
-	        LocalTime endTime = LocalTime.of(end, 0);
-	        if(!tempTime.isBefore(startTime) && !tempTime.isAfter(endTime)) {
-	        	return true;
-	        }
-	        return false;
-		}
-		catch(DateTimeParseException e) {
-			return false;
-		}
-	}
-	
-	private static Boolean isAboveStartTime(String startTime, String endTime) {
-		try {
-			LocalTime start = LocalTime.parse(startTime);
-			LocalTime tempTime = LocalTime.parse(endTime);
-			if(tempTime.isAfter(start)) {
-				return true;
-			}
-			return false;
-		}
-		catch(DateTimeParseException e) {
-			return false;
-		}
 	}
 	
 }

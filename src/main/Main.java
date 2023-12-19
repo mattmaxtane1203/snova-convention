@@ -1,12 +1,13 @@
 package main;
 
 import controller.TransactionController;
+import controller.UserController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.User;
 import view.FanHomePage;
 import view.FanPanelPage;
-import view.InfluencerPage;
+import view.InfluencerHomePage;
 import view.RegisterPage;
 
 public class Main extends Application {
@@ -26,10 +27,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 //		new RegisterPage(primaryStage);
-//		new InfluencerPage(primaryStage);
 		
-		new FanHomePage(primaryStage, User.getUser("22"));
-//		new FanPanelPage(primaryStage);
+		new InfluencerHomePage(primaryStage, UserController.getUser("25"));
 		
 		primaryStage.setTitle("SNova Convention");
 		primaryStage.show();

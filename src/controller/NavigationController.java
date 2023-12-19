@@ -11,6 +11,7 @@ import view.FanHomePage;
 import view.FanPanelPage;
 import view.FanTransactionPage;
 import view.FanVendorPage;
+import view.InfluencerHomePage;
 import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
@@ -86,6 +87,13 @@ public class NavigationController {
 	public static void navigateFanTransactionPage(Button btn, Stage stage, User currentUser) {
 		btn.setOnMouseClicked(e -> {
 			new FanTransactionPage(stage, currentUser);
+		});
+	}
+
+//	Influencer-related pages
+	public static void navigateInfluencerHomePage(Button btn, Stage stage, User currentUser) {
+		btn.setOnMouseClicked(e -> {
+			new InfluencerHomePage(stage, currentUser);
 		});
 	}
 }

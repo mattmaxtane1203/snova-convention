@@ -224,41 +224,37 @@ public class PanelHeader {
 		}
 
 //		TODO: Check parameter if need to change to DateTime
-		public static void addPanel(String influencerID, String panelTitle, String panelDesc, String location, String startTime, String endTime) {
-			con = Connect.getInstance();
-			if (!con.isConnected()) {
-				System.out.println("Failed to connect to Database");
-				return;
-			}
-			
-			String query = "insert into panelheader (UserID, "
-					+ "PanelTitle,PanelDescription,Location,StartTime,"
-					+ "EndTime, IsFinished) values (?, ?, ?, ?, ?, ?, ?);";
-			
-			//PanelID AUTO INCREMENT
-			try (PreparedStatement ps = con.prepareStatement(query)) {
-				ps.setInt(1, Integer.parseInt(influencerID));
-				ps.setString(2, panelTitle);
-				ps.setString(3, panelDesc);
-				ps.setString(4, location);
-				ps.setString(5, startTime);
-				ps.setString(6, endTime);
-				ps.setBoolean(7, false);
-				int rowsAffected = ps.executeUpdate();
+		public static void addPanel(String influencerID, String panelTitle, String panelDesc, String location, LocalDateTime startTime, LocalDateTime endTime) {
+		    con = Connect.getInstance();
+		    if (!con.isConnected()) {
+		        System.out.println("Failed to connect to Database");
+		        return;
+		    }
 
-				if (rowsAffected > 0) {
-					System.out.println("Panel added succesfully");
-				} else {
-					System.out.println("Failed to add Panel");
-				}
-				ps.close();
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			
+		    String query = "INSERT INTO panelheader (UserID, PanelTitle, PanelDescription, Location, StartTime, EndTime, IsFinished) VALUES (?, ?, ?, ?, ?, ?, ?);";
+
+		    try (PreparedStatement ps = con.prepareStatement(query)) {
+		        ps.setInt(1, Integer.parseInt(influencerID));
+		        ps.setString(2, panelTitle);
+		        ps.setString(3, panelDesc);
+		        ps.setString(4, location);
+		        ps.setObject(5, startTime);
+		        ps.setObject(6, endTime);
+		        ps.setBoolean(7, false);
+
+		        int rowsAffected = ps.executeUpdate();
+
+		        if (rowsAffected > 0) {
+		            System.out.println("Panel added successfully");
+		        } else {
+		            System.out.println("Failed to add Panel");
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
 		}
+
 		
 //		TODO: Check parameter if need to change to DateTime
 		public static void setPanelTime(String startTime, String endTime, String panelID) {
@@ -279,7 +275,7 @@ public class PanelHeader {
 				e1.printStackTrace();
 			}
 		}
-		
+
 		
 		public static void finishPanel(String panelID) {
 			con = Connect.getInstance();
@@ -298,8 +294,7 @@ public class PanelHeader {
 				e1.printStackTrace();
 			}
 		}
-		
-		
+			
 		public static ObservableList<PanelHeader> getAllUnFinishedPanels(){
 			con = Connect.getInstance();
 
@@ -349,6 +344,58 @@ public class PanelHeader {
 			}
 			return null;		
 		}
+		
+		public static ObservableList<PanelHeader> getAllUnFinishedPanelsByInfluencer(String userID) {
+		    con = Connect.getInstance();
+
+		    if (!con.isConnected()) {
+		        return null;
+		    }
+
+		    ObservableList<PanelHeader> panels = FXCollections.observableArrayList();
+		    String query = "SELECT * FROM panelheader WHERE IsFinished = 0 AND UserID = ?";
+		    
+		    try {
+		        PreparedStatement ps = con.prepareStatement(query);
+		        ps.setInt(1, Integer.parseInt(userID));
+		        ResultSet rs = ps.executeQuery();
+
+		        panels = PanelHeader.setAllPanelsDetails(rs, panels);
+		        rs.close();
+		        ps.close();
+		        return panels;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return null;
+		}
+
+		
+		public static ObservableList<PanelHeader> getAllFinishedPanelsByInfluencer(String userID) {
+		    con = Connect.getInstance();
+
+		    if (!con.isConnected()) {
+		        return null;
+		    }
+
+		    ObservableList<PanelHeader> panels = FXCollections.observableArrayList();
+		    String query = "SELECT * FROM panelheader WHERE IsFinished = 1 AND UserID = ?";
+		    
+		    try {
+		        PreparedStatement ps = con.prepareStatement(query);
+		        ps.setInt(1, Integer.parseInt(userID));
+		        ResultSet rs = ps.executeQuery();
+
+		        panels = PanelHeader.setAllPanelsDetails(rs, panels);
+		        rs.close();
+		        ps.close();
+		        return panels;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return null;
+		}
+
 		
 		public static ObservableList<PanelHeader> getAllPanelByInfluencer(String UserID){
 			con = Connect.getInstance();

@@ -9,6 +9,7 @@ import view.FanHomePage;
 import view.FanPanelPage;
 import view.InfluencerHomePage;
 import view.RegisterPage;
+import view.VendorHomePage;
 
 public class Main extends Application {
 
@@ -28,7 +29,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 //		new RegisterPage(primaryStage);
 		
-		new InfluencerHomePage(primaryStage, UserController.getUser("25"));
+//		new InfluencerHomePage(primaryStage, UserController.getUser("25"));
+		new VendorHomePage(primaryStage, UserController.getUser("27"));
 		
 		primaryStage.setTitle("SNova Convention");
 		primaryStage.show();

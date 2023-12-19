@@ -113,6 +113,8 @@ public class Item {
 				
 				item = new Item(currItemID, currUserID, currItemName, currItemDescription, currPrice);
 				
+				System.out.println(item.getItemID());
+				
 				return item;
 			}
 		} catch (SQLException e) {
@@ -191,7 +193,7 @@ con = Connect.getInstance();
 			
 			item = Item.convertResultSet(rs);
 			
-			System.out.println(item);
+			System.out.println("Get Item: " + item.getItemID());
 			
 			if(item == null) {
 				System.out.println("Item does not exist");
@@ -241,8 +243,45 @@ con = Connect.getInstance();
 		
 		return "Something went wrong...";
 	}
+	
+	public static String updateItem(String itemID, String itemName, String itemDescription, BigDecimal price) {
+		con = Connect.getInstance();
 
-	public static String deleteItem(String itemID) {
+		if (!con.isConnected()) {
+			return "Failed to connect to database";
+		}
+		
+		String query = "update item set ItemName = ?, ItemDescription = ?, Price = ? where ItemID = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		System.out.println(itemName + "|" + itemDescription + "|" + price.toString() + "|" + itemID);
+		
+		try {
+			ps.setString(1, itemName);
+			ps.setString(2, itemDescription);
+			ps.setBigDecimal(3, price);
+			ps.setInt(4, Integer.parseInt(itemID));
+			
+			int rowsAffected = ps.executeUpdate();
+
+			ps.close();
+			
+			if (rowsAffected > 0) {
+				return "Item edited succesfully";
+			} else {
+				return "Failed to add item";
+			}
+			
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "Something went wrong...";
+	}
+
+ 	public static String deleteItem(String itemID) {
 		
 		String query = "delete from item where ItemID = ?";
 		PreparedStatement ps = con.prepareStatement(query);

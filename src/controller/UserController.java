@@ -248,7 +248,7 @@ public class UserController {
 		}
 
 		if (role.equals("Influencer")) {
-			System.out.println("Influencer");
+			NavigationController.navigateInfluencerHomePage(btn, stage, user);
 			return;
 		}
 		

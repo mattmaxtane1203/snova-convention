@@ -15,6 +15,7 @@ import view.InfluencerHomePage;
 import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
+import view.VendorHomePage;
 
 public class NavigationController {
 
@@ -94,6 +95,13 @@ public class NavigationController {
 	public static void navigateInfluencerHomePage(Button btn, Stage stage, User currentUser) {
 		btn.setOnMouseClicked(e -> {
 			new InfluencerHomePage(stage, currentUser);
+		});
+	}
+	
+//	Vendor-related pages
+	public static void navigateVendorHomePage(Button btn, Stage stage, User currentUser) {
+		btn.setOnMouseClicked(e -> {
+			new VendorHomePage(stage, currentUser);
 		});
 	}
 }

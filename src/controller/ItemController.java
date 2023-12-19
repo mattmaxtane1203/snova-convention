@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import model.Item;
 import model.User;
 import view.FanVendorPage;
+import view.VendorHomePage;
 
 public class ItemController {
 
@@ -36,17 +37,32 @@ public class ItemController {
 		return item;
 	}
 
-	public static String addItem(String userID, String itemName, String itemDescription, BigDecimal price) {
+	public static void addItem(String userID, String itemName, String itemDescription, BigDecimal price) {
 
 		String res = ItemController.itemInformationValid(userID, itemName, itemDescription, price);
 
 		if (!res.equals("true")) {
-			return res;
+			VendorHomePage.res.setText(res);
+			return;
 		}
 
 		res = Item.addItem(userID, itemName, itemDescription, price);
 
-		return res;
+		VendorHomePage.res.setText(res);
+	}
+
+	public static void updateItem(String itemID, String itemName, String itemDescription, BigDecimal price) {
+		String res = ItemController.itemInformationValid(itemName, itemDescription, price);
+
+
+		if (!res.equals("true")) {
+			VendorHomePage.res.setText(res);
+			return;
+		}
+
+		res = Item.updateItem(itemID, itemName, itemDescription, price);
+		
+		VendorHomePage.res.setText(res);
 	}
 
 	public static String deleteItem(String itemID) {
@@ -125,29 +141,104 @@ public class ItemController {
 
 		return items;
 	}
-	
+
 	public static void buyItemAction(Button btn, Item item, TextField qty, User currentUser) {
 		btn.setOnMouseClicked(e -> {
-            // Validate quantity input
-            try {
-                int quantity = Integer.parseInt(qty.getText());
-                if (quantity <= 0) {
-                	FanVendorPage.popupResponse.setText("Quantity must be greater than 0");
-                    return;
-                }
-                
-                buyItem(item, currentUser, quantity);
-            } catch (NumberFormatException ex) {
-            	FanVendorPage.popupResponse.setText("Invalid quantity format");
-            }
-        });
+			// Validate quantity input
+			try {
+				int quantity = Integer.parseInt(qty.getText());
+				if (quantity <= 0) {
+					FanVendorPage.popupResponse.setText("Quantity must be greater than 0");
+					return;
+				}
+
+				buyItem(item, currentUser, quantity);
+			} catch (NumberFormatException ex) {
+				FanVendorPage.popupResponse.setText("Invalid quantity format");
+			}
+		});
 	}
-	
+
 	private static void buyItem(Item item, User currentUser, Integer quantity) {
-		
+
 		String res = TransactionController.addTransaction(currentUser.getUserID(), item.getItemID(), quantity);
-		
+
 		FanVendorPage.popupResponse.setText(res);
+	}
+
+	public static void addItemAction(Button btn, User currentUser) {
+		btn.setOnMouseClicked(e -> {
+			String itemName = VendorHomePage.nameField.getText();
+			String itemDescription = VendorHomePage.descField.getText();
+			BigDecimal itemPrice;
+
+			try {
+				itemPrice = new BigDecimal(VendorHomePage.priceField.getText());
+			} catch (NumberFormatException nfe) {
+				VendorHomePage.res.setText("Price must be a decimal");
+				return;
+			}
+
+			String res = itemInformationValid(currentUser.getUserID(), itemName, itemDescription, itemPrice);
+
+			if (!res.equals("true")) {
+				VendorHomePage.res.setText("Item added successfully");
+				return;
+			}
+
+			addItem(currentUser.getUserID(), itemName, itemDescription, itemPrice);
+
+			refreshTable(currentUser);
+
+			VendorHomePage.res.setText("Item added successfully");
+		});
+	}
+
+	public static void updateItemAction(Button btn, User currentUser, String itemID) {
+		btn.setOnMouseClicked(e -> {
+			String itemName = VendorHomePage.nameField.getText();
+			String itemDescription = VendorHomePage.descField.getText();
+			BigDecimal itemPrice;
+
+			try {
+				itemPrice = new BigDecimal(VendorHomePage.priceField.getText());
+			} catch (NumberFormatException nfe) {
+				VendorHomePage.res.setText("Price must be a decimal");
+				return;
+			}
+			
+//			System.out.println(itemName + "|" + itemDescription + "|" + itemPrice.toString());
+
+			updateItem(itemID, itemName, itemDescription, itemPrice);
+
+			refreshTable(currentUser);
+
+			VendorHomePage.res.setText("Item edited successfully");
+		});
+	}
+
+	public static void deleteItemAction(Button btn, User currentUser) {
+		btn.setOnMouseClicked(e -> {
+			// Get the selected item
+			Item selectedItem = (Item) VendorHomePage.ItemTable.getSelectionModel().getSelectedItem();
+
+			if (selectedItem != null) {
+				String itemID = selectedItem.getItemID();
+
+				String res = deleteItem(itemID);
+
+				refreshTable(currentUser);
+
+				VendorHomePage.res.setText(res);
+				return;
+			}
+
+			VendorHomePage.res.setText("Select an item to delete");
+		});
+	}
+
+	public static void refreshTable(User currentUser) {
+		VendorHomePage.ItemTable.setItems(getAllItemsByVendor(currentUser.getUserID()));
 	}
 
 //	Helper function
@@ -163,6 +254,27 @@ public class ItemController {
 		if (user == null) {
 			return "User does not exist";
 		}
+
+		if (itemName.equals("") || itemName == null) {
+			return "Item name cannot be empty";
+		}
+
+		if (itemDescription.equals("") || itemDescription == null) {
+			return "Item Description cannot be empty";
+		}
+
+		if (itemDescription.length() > 250) {
+			return "Item description cannot be longer than 250 characters";
+		}
+
+		if (price == null | price.compareTo(BigDecimal.ZERO) <= 0) {
+			return "Price must be bigger than 0";
+		}
+
+		return "true";
+	}
+
+	public static String itemInformationValid(String itemName, String itemDescription, BigDecimal price) {
 
 		if (itemName.equals("") || itemName == null) {
 			return "Item name cannot be empty";

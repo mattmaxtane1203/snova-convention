@@ -224,11 +224,10 @@ public class PanelHeader {
 		}
 
 //		TODO: Check parameter if need to change to DateTime
-		public static void addPanel(String influencerID, String panelTitle, String panelDesc, String location, LocalDateTime startTime, LocalDateTime endTime) {
+		public static String addPanel(String influencerID, String panelTitle, String panelDesc, String location, LocalDateTime startTime, LocalDateTime endTime) {
 		    con = Connect.getInstance();
 		    if (!con.isConnected()) {
-		        System.out.println("Failed to connect to Database");
-		        return;
+		        return "Failed to connect database";
 		    }
 
 		    String query = "INSERT INTO panelheader (UserID, PanelTitle, PanelDescription, Location, StartTime, EndTime, IsFinished) VALUES (?, ?, ?, ?, ?, ?, ?);";
@@ -245,14 +244,16 @@ public class PanelHeader {
 		        int rowsAffected = ps.executeUpdate();
 
 		        if (rowsAffected > 0) {
-		            System.out.println("Panel added successfully");
+		            return "Panel added succesfully";
 		        } else {
-		            System.out.println("Failed to add Panel");
+		        	return "Failed to add panel";
 		        }
 
 		    } catch (SQLException e) {
 		        e.printStackTrace();
 		    }
+		    
+		    return "Something went wrong... Please try again later";
 		}
 
 		

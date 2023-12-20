@@ -12,18 +12,11 @@ import view.FanPanelPage;
 import view.FanTransactionPage;
 import view.FanVendorPage;
 import view.InfluencerHomePage;
-import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
 import view.VendorHomePage;
 
 public class NavigationController {
-
-	public static void navigateHomePage(Button btn, Stage stage) {
-		btn.setOnMouseClicked(e -> {			
-			new Init(stage);
-		});
-	}
 	
 	public static void navigateLoginPage(Button btn, Stage stage) {
 		btn.setOnMouseClicked(e -> {

@@ -2,6 +2,7 @@ package view;
 
 import controller.NavigationController;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,21 +39,31 @@ public class AdminHomePage {
 	}
 	
 	private void styling() {
-		
-	}
+        String titleStyle = "-fx-font-size: 24px; -fx-font-weight: bold;";
+        title.setStyle(titleStyle);
+    }
 	
 	private void layouting() {
-		title.setPadding(new Insets(0, 0, 10, 0));
-		
-		buttonBox.getChildren().addAll(viewFans, viewVendors, viewInfluencers, logout);
-		
-		homeBox.getChildren().addAll(title, buttonBox);
-		
-		homeBox.setPadding(new Insets(50, 50, 50, 50));
-		
-		homePane.setCenter(homeBox);
-		
-		mainScene = new Scene(homePane, 600, 600);
+	    title.setPadding(new Insets(0, 0, 10, 0));
+
+	    buttonBox.getChildren().addAll(viewFans, viewVendors, viewInfluencers, logout);
+	    
+	    // Center VBox contents
+	    buttonBox.setAlignment(Pos.CENTER);
+	    
+	    // Add vertical spacing between buttons
+	    buttonBox.setSpacing(20);
+
+	    homeBox.getChildren().addAll(title, buttonBox);
+	    
+	    // Center VBox contents
+	    homeBox.setAlignment(Pos.CENTER);
+	    
+	    homeBox.setPadding(new Insets(50, 50, 50, 50));
+
+	    homePane.setCenter(homeBox);
+
+	    mainScene = new Scene(homePane, 600, 600);
 	}
 	
 	private void actions(Stage stage, User currentAdmin) {

@@ -3,6 +3,7 @@ package view;
 import java.math.BigDecimal;
 
 import controller.ItemController;
+import controller.NavigationController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -62,6 +63,7 @@ public class VendorHomePage {
 	public Button addItem = new Button("Add Item");
 	public Button updateItem = new Button("Update Item");
 	public Button deleteItem = new Button("Delete Item");
+	Button logout = new Button("Logout");
 
 	private void styling() {
 
@@ -79,6 +81,8 @@ public class VendorHomePage {
 		itemIDField.setEditable(false);
 	    itemIDField.setDisable(true);
 	    itemIDField.setFocusTraversable(false);
+	    
+	    res.setStyle("-fx-text-fill: red;");
 	}
 
 	private void init() {
@@ -111,7 +115,7 @@ public class VendorHomePage {
         });
 
 		additemContainer.getChildren().addAll(itemIDLabel, itemIDField, nameLabel, nameField, descLabel, descField, priceLabel, priceField, res,
-				addItem, updateItem, deleteItem);
+				addItem, updateItem, deleteItem, logout);
 		vendorhomeContainer.getChildren().addAll(ItemTable, additemContainer);
 		paneBox.getChildren().add(vendorhomeContainer);
 		vendorhomePane.setCenter(paneBox);
@@ -120,7 +124,8 @@ public class VendorHomePage {
 
 	}
 
-	private void action() {
+	private void action(Stage stage) {
+		NavigationController.navigateLoginPage(logout, stage);
 		ItemController.addItemAction(addItem, currentUser);
 		ItemController.updateItemAction(updateItem, currentUser);
 		ItemController.deleteItemAction(deleteItem, currentUser);
@@ -131,7 +136,7 @@ public class VendorHomePage {
 
 		init();
 		styling();
-		action();
+		action(stage);
 
 		stage.setTitle("Transaction History");
 		stage.setResizable(false);

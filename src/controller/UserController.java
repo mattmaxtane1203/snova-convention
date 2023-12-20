@@ -19,7 +19,6 @@ import model.User;
 import view.AdminFansPage;
 import view.AdminInfluencersPage;
 import view.AdminVendorsPage;
-import view.Init;
 import view.LoginPage;
 import view.RegisterPage;
 
@@ -171,23 +170,21 @@ public class UserController {
 	}
 
 	public static void handleLogin(Button loginBtn, Stage stage) {
+	    loginBtn.setOnAction(e -> {
+	        String email = LoginPage.emailField.getText();
+	        String password = LoginPage.passwordField.getText();
 
-		loginBtn.setOnMouseClicked(e -> {
+	        User user = getUserByEmail(email);
 
-			String email = LoginPage.emailField.getText();
-			String password = LoginPage.passwordField.getText();
+	        if (user == null || !password.equals(user.getPassword())) {
+	            LoginPage.response.setText("Invalid email/password");
+	            return;
+	        }
 
-			User user = getUserByEmail(email);
-
-			if (user == null || !password.equals(user.getPassword())) {
-				LoginPage.response.setText("Invalid email/password");
-				return;
-			}
-			
-			redirectLogin(loginBtn, stage, user.getRole(), user);
-		});
-
+	        redirectLogin(loginBtn, stage, user.getRole(), user);
+	    });
 	}
+
 
 	public static void handleRegister(Button registerBtn, Stage stage) {
 		registerBtn.setOnMouseClicked(e -> {
@@ -243,7 +240,7 @@ public class UserController {
 		}
 
 		if (role.equals("Vendor")) {
-			System.out.println("Vendor");
+			NavigationController.navigateVendorHomePage(btn, stage, user);
 			return;
 		}
 

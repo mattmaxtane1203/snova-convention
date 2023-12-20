@@ -10,6 +10,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class LoginPage {
@@ -49,7 +51,17 @@ public class LoginPage {
 	}
 	
 	private void styling() {
-		
+		Font titleFont = Font.font("Poppins", FontWeight.BOLD, 40);
+        titlePage.setFont(titleFont);
+
+        Font textFont = Font.font("Poppins", 16);
+        Font alertFont = Font.font("Poppins", FontWeight.BOLD, 16);
+
+        emailLabel.setFont(textFont);
+        passwordLabel.setFont(textFont);
+
+        response.setFont(textFont);
+        response.setStyle("-fx-text-fill: red;");
 	}
 	
 	private void layouting() {

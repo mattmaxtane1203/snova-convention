@@ -25,6 +25,7 @@ public class FanHomePage {
 	public Button panelsButton = new Button("View All Panels");
 	public Button vendorsButton = new Button("View All Vendors");
 	public Button transactionHistoryButton = new Button("View Transaction History");
+	Button logout = new Button("Logout");
 
 	private void styling() {
 
@@ -39,7 +40,7 @@ public class FanHomePage {
 	private void init(User currentUser) {
 		menu = new Label("Welcome, " + currentUser.getUsername());
 		
-		FanhomeContainer.getChildren().addAll(menu, panelsButton, vendorsButton, transactionHistoryButton);
+		FanhomeContainer.getChildren().addAll(menu, panelsButton, vendorsButton, transactionHistoryButton, logout);
 		paneBox.getChildren().add(FanhomeContainer);
 		FanhomePane.setCenter(paneBox);
 
@@ -47,6 +48,7 @@ public class FanHomePage {
 	}
 	
 	private void actions(Stage stage, User currentUser) {
+		NavigationController.navigateLoginPage(logout, stage);
 		NavigationController.navigateFanPanelPage(panelsButton, stage, currentUser);
 		NavigationController.navigateFanVendorPage(vendorsButton, stage, currentUser);
 		NavigationController.navigateFanTransactionPage(transactionHistoryButton, stage, currentUser);

@@ -5,9 +5,11 @@ import controller.UserController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.User;
+import view.AdminHomePage;
 import view.FanHomePage;
 import view.FanPanelPage;
 import view.InfluencerHomePage;
+import view.LoginPage;
 import view.RegisterPage;
 import view.VendorHomePage;
 
@@ -27,10 +29,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-//		new RegisterPage(primaryStage);
-		
-//		new InfluencerHomePage(primaryStage, UserController.getUser("25"));
-		new VendorHomePage(primaryStage, UserController.getUser("27"));
+		new LoginPage(primaryStage);
 		
 		primaryStage.setTitle("SNova Convention");
 		primaryStage.show();

@@ -1,5 +1,6 @@
 package view;
 
+import controller.NavigationController;
 import controller.PanelController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -40,6 +41,9 @@ public class FanPanelPage {
 
 	// Detail Button
 	public Button detailButton = new Button("Detail");
+	
+//	Back Button
+	Button backButton = new Button("Back to Home");
 
 //	Popup-related components
 	Stage popupStage = new Stage();
@@ -102,7 +106,7 @@ public class FanPanelPage {
 		finishedPanelTable.setItems(PanelController.getAllFinishedPanels());
 
 		allpanelContainer.getChildren().addAll(upcomingPanelTable, finishedPanelTable);
-		popupPaneBox.getChildren().addAll(allpanelContainer, detailButton);
+		popupPaneBox.getChildren().addAll(allpanelContainer, detailButton, backButton);
 		allpanelPane.setCenter(popupPaneBox);
 
 		allpanelScene = new Scene(allpanelPane, 600, 600);
@@ -162,7 +166,9 @@ public class FanPanelPage {
 		popupStage.show();
 	}
 
-	private void action() {
+	private void action(Stage stage) {
+		NavigationController.navigateFanHomePage(backButton, stage, currentUser);
+		
 		upcomingPanelTable.setOnMouseClicked(event -> {
 
 			if (event.getClickCount() == 1) {
@@ -210,7 +216,7 @@ public class FanPanelPage {
 		
 		init();
 		styling();
-		action();
+		action(stage);
 
 		stage.setTitle("All Panels");
 		stage.setResizable(false);

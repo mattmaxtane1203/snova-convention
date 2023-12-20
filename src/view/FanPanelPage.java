@@ -21,7 +21,7 @@ import model.User;
 
 public class FanPanelPage {
 	
-	User currentUser;
+	static User currentUser;
 
 	ObservableList<String> upcomingPanels = FXCollections.observableArrayList("Panel 1", "Panel 2", "Panel 3");
 	ObservableList<String> finishedPanels = FXCollections.observableArrayList("Panel 4", "Panel 5", "Panel 6");
@@ -33,12 +33,12 @@ public class FanPanelPage {
 	VBox paneBox = new VBox(10);
 
 	// Table View & Columns
-	TableView upcomingPanelTable = new TableView();
+	public static TableView upcomingPanelTable = new TableView();
 	TableColumn<PanelHeader, String> column1 = new TableColumn<>("Upcoming Panels");
 
-	TableView finishedPanelTable = new TableView();
+	public static TableView finishedPanelTable = new TableView();
 	TableColumn<PanelHeader, String> column2 = new TableColumn<>("Finished Panels");
-
+	
 	// Detail Button
 	public Button detailButton = new Button("Detail");
 	
@@ -89,6 +89,7 @@ public class FanPanelPage {
 		column1.setResizable(false);
 		column2.setResizable(false);
 
+		response.setStyle("-fx-text-fill: red;");
 	}
 
 	private void init() {
@@ -113,7 +114,7 @@ public class FanPanelPage {
 
 	}
 
-	public void panelDetail(PanelHeader selectedPanel) {
+	public static void panelDetail(PanelHeader selectedPanel) {
 		Stage popupStage = new Stage();
 
 		popupStage.initModality(Modality.APPLICATION_MODAL);
@@ -169,37 +170,40 @@ public class FanPanelPage {
 	private void action(Stage stage) {
 		NavigationController.navigateFanHomePage(backButton, stage, currentUser);
 		
-		upcomingPanelTable.setOnMouseClicked(event -> {
+		PanelController.updateUpcomingPanelTable();
+//		upcomingPanelTable.setOnMouseClicked(event -> {
+//
+//			if (event.getClickCount() == 1) {
+//				
+//				PanelHeader selectedPanel = (PanelHeader) upcomingPanelTable.getSelectionModel().getSelectedItem();
+//				
+//				if (selectedPanel != null) {
+//					updatePanelDetail(selectedPanel);
+//				}
+//			}
+//		});
+		
+		PanelController.updateFinishedPanelTable();
+//		finishedPanelTable.setOnMouseClicked(event -> {
+//			
+//			if (event.getClickCount() == 1) {
+//				PanelHeader selectedPanel = (PanelHeader) finishedPanelTable.getSelectionModel().getSelectedItem();
+//				
+//				if (selectedPanel != null) {
+//					updatePanelDetail(selectedPanel);
+//				}
+//			}
+//		});
 
-			if (event.getClickCount() == 1) {
-				
-				PanelHeader selectedPanel = (PanelHeader) upcomingPanelTable.getSelectionModel().getSelectedItem();
-				
-				if (selectedPanel != null) {
-					updatePanelDetail(selectedPanel);
-				}
-			}
-		});
-
-		finishedPanelTable.setOnMouseClicked(event -> {
-			
-			if (event.getClickCount() == 1) {
-				PanelHeader selectedPanel = (PanelHeader) finishedPanelTable.getSelectionModel().getSelectedItem();
-				
-				if (selectedPanel != null) {
-					updatePanelDetail(selectedPanel);
-				}
-			}
-		});
-
-		detailButton.setOnMouseClicked(e -> {
-			
-			PanelHeader selectedPanel = (PanelHeader) upcomingPanelTable.getSelectionModel().getSelectedItem();
-			
-			if (selectedPanel != null) {
-				panelDetail(selectedPanel);
-			}
-		});
+		PanelController.viewPanelDetailAction(detailButton);
+//		detailButton.setOnMouseClicked(e -> {
+//			
+//			PanelHeader selectedPanel = (PanelHeader) upcomingPanelTable.getSelectionModel().getSelectedItem();
+//			
+//			if (selectedPanel != null) {
+//				panelDetail(selectedPanel);
+//			}
+//		});
 	}
 
 	private void updatePanelDetail(PanelHeader selectedPanel) {

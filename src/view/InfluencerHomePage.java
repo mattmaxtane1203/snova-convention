@@ -123,7 +123,7 @@ public class InfluencerHomePage {
 
 	}
 
-	public void panelDetail(String panelID) {
+	public static void panelDetail(String panelID) {
 		Stage popupStage = new Stage();
 
 		popupStage.initModality(Modality.APPLICATION_MODAL);
@@ -205,29 +205,8 @@ public class InfluencerHomePage {
 
 	private void action(Stage stage) {
 		NavigationController.navigateLoginPage(logout, stage);
-		
-		viewButton.setOnMouseClicked(e -> {
-	        PanelHeader selectedPanel = (PanelHeader) finishedPanelTable.getSelectionModel().getSelectedItem();
-
-	        if (selectedPanel != null) {
-	            panelDetail(selectedPanel.getPanelID());
-	        } else {
-	            System.out.println("Please select a panel.");
-	        }
-	    });
-		
-		finishButton.setOnMouseClicked(e -> {
-	        PanelHeader selectedPanel = (PanelHeader) upcomingPanelTable.getSelectionModel().getSelectedItem();
-
-	        if (selectedPanel != null) {
-	            PanelController.finishPanel(selectedPanel.getPanelID());
-	            PanelController.refreshTable(currentUser.getUserID());
-	            return;
-	        }
-	        
-	        panelRes.setText("Please select a panel");
-	    });
-		
+		PanelController.viewPanelAction(viewButton);
+		PanelController.finishPanelAction(finishButton, currentUser);
 		PanelController.handleCreatePanel(createButton, currentUser);
 	}
 	

@@ -171,6 +171,33 @@ public class PanelController {
 	    }
 	}
 	
+	public static void viewPanelAction(Button btn) {
+		btn.setOnMouseClicked(e -> {
+	        PanelHeader selectedPanel = (PanelHeader) InfluencerHomePage.finishedPanelTable.getSelectionModel().getSelectedItem();
+
+	        if (selectedPanel != null) {
+	        	InfluencerHomePage.panelDetail(selectedPanel.getPanelID());
+	        	return;
+	        }
+	        
+	        InfluencerHomePage.panelRes.setText("Please select a panel.");
+	    });
+	}
+	
+	public static void finishPanelAction(Button btn, User currentUser) {
+		btn.setOnMouseClicked(e -> {
+	        PanelHeader selectedPanel = (PanelHeader) InfluencerHomePage.upcomingPanelTable.getSelectionModel().getSelectedItem();
+
+	        if (selectedPanel != null) {
+	            PanelController.finishPanel(selectedPanel.getPanelID());
+	            PanelController.refreshTable(currentUser.getUserID());
+	            return;
+	        }
+	        
+	        InfluencerHomePage.panelRes.setText("Please select a panel");
+	    });
+	}
+	
 	//VALIDASI TAMBAHAN
 	private static Boolean hasTwoWords(String input) {
 		String[] words = input.split("\\s+");

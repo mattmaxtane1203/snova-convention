@@ -52,8 +52,8 @@ public class ItemController {
 	}
 
 	public static void updateItem(String itemID, String itemName, String itemDescription, BigDecimal price) {
-		String res = ItemController.itemInformationValid(itemName, itemDescription, price);
 
+		String res = ItemController.itemInformationValid(itemName, itemDescription, price);
 
 		if (!res.equals("true")) {
 			VendorHomePage.res.setText(res);
@@ -61,7 +61,7 @@ public class ItemController {
 		}
 
 		res = Item.updateItem(itemID, itemName, itemDescription, price);
-		
+
 		VendorHomePage.res.setText(res);
 	}
 
@@ -194,8 +194,20 @@ public class ItemController {
 		});
 	}
 
-	public static void updateItemAction(Button btn, User currentUser, String itemID) {
+	public static void updateItemAction(Button btn, User currentUser) {
 		btn.setOnMouseClicked(e -> {
+			// Disable the button to prevent multiple clicks
+			btn.setDisable(true);
+
+			// Check if itemIDField is not empty
+			if (VendorHomePage.itemIDField.getText().isEmpty()) {
+				VendorHomePage.res.setText("Select an item to update");
+
+				// Re-enable the button
+				btn.setDisable(false);
+				return;
+			}
+
 			String itemName = VendorHomePage.nameField.getText();
 			String itemDescription = VendorHomePage.descField.getText();
 			BigDecimal itemPrice;
@@ -204,16 +216,33 @@ public class ItemController {
 				itemPrice = new BigDecimal(VendorHomePage.priceField.getText());
 			} catch (NumberFormatException nfe) {
 				VendorHomePage.res.setText("Price must be a decimal");
+
+				// Re-enable the button
+				btn.setDisable(false);
 				return;
 			}
-			
-//			System.out.println(itemName + "|" + itemDescription + "|" + itemPrice.toString());
 
-			updateItem(itemID, itemName, itemDescription, itemPrice);
+			// Get the selected item and its index
+			TableView<Item> itemTable = VendorHomePage.ItemTable;
+			int selectedIndex = itemTable.getSelectionModel().getSelectedIndex();
+			Item selectedItem = (Item) itemTable.getSelectionModel().getSelectedItem();
 
-			refreshTable(currentUser);
+			if (selectedItem != null) {
+				String itemID = selectedItem.getItemID();
 
-			VendorHomePage.res.setText("Item edited successfully");
+				updateItem(itemID, itemName, itemDescription, itemPrice);
+
+				// Refresh the table
+				refreshTable(currentUser);
+
+				// Reselect the row
+				itemTable.getSelectionModel().select(selectedIndex);
+
+				VendorHomePage.res.setText("Item edited successfully");
+			}
+
+			// Re-enable the button
+			btn.setDisable(false);
 		});
 	}
 

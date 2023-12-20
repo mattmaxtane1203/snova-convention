@@ -6,9 +6,12 @@ import controller.ItemController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -72,7 +75,10 @@ public class VendorHomePage {
 		column1.setResizable(false);
 		column2.setResizable(false);
 		column3.setResizable(false);
-
+		
+		itemIDField.setEditable(false);
+	    itemIDField.setDisable(true);
+	    itemIDField.setFocusTraversable(false);
 	}
 
 	private void init() {
@@ -87,20 +93,22 @@ public class VendorHomePage {
 
 		ItemTable.setItems(ItemController.getAllItemsByVendor(currentUser.getUserID()));
 		
-		ItemTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-	        if (newSelection != null) {
-	            // TODO: Get ItemID
-//	        	String selectedItemID = ((Item) newSelection).getItemID();
-	            String selectedItemName = ((Item) newSelection).getItemName();
-	            String selectedItemDescription = ((Item) newSelection).getItemDescription();
-	            BigDecimal selectedItemPrice = ((Item) newSelection).getPrice();
+		// Set selection model to allow selecting multiple rows
+        ItemTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-	            // Set the properties to the text fields
-	            nameField.setText(selectedItemName);
-	            descField.setText(selectedItemDescription);
-	            priceField.setText(selectedItemPrice.toString());
-	        }
-	    });
+        // Add a selection listener to update the text fields when a row is selected
+        ItemTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Item>() {
+            @Override
+            public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
+                if (newValue != null) {
+                    // Update text fields with the selected item's values
+                    itemIDField.setText(newValue.getItemID());
+                    nameField.setText(newValue.getItemName());
+                    descField.setText(newValue.getItemDescription());
+                    priceField.setText(newValue.getPrice().toString());
+                }
+            }
+        });
 
 		additemContainer.getChildren().addAll(itemIDLabel, itemIDField, nameLabel, nameField, descLabel, descField, priceLabel, priceField, res,
 				addItem, updateItem, deleteItem);
@@ -114,7 +122,7 @@ public class VendorHomePage {
 
 	private void action() {
 		ItemController.addItemAction(addItem, currentUser);
-		ItemController.updateItemAction(updateItem, currentUser, itemIDField.getText());
+		ItemController.updateItemAction(updateItem, currentUser);
 		ItemController.deleteItemAction(deleteItem, currentUser);
 	}
 

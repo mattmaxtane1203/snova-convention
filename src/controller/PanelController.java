@@ -33,13 +33,15 @@ public class PanelController {
 		String res = PanelController.isValidPanelData(panelTitle, panelDesc, location, startTime, endTime);
 		
 		if(!res.equals("true")) {
-			InfluencerHomePage.createPanelRes.setText(res);
+			InfluencerHomePage.createPanelRes.setText("Invalid data formats");
 			return;
 		}
 		
-		PanelHeader.addPanel(currentUser.getUserID(), panelTitle, panelDesc, location, startTime, endTime);
+		res = PanelHeader.addPanel(currentUser.getUserID(), panelTitle, panelDesc, location, startTime, endTime);
 		
-		InfluencerHomePage.createPanelRes.setText(res);;
+		refreshTable(currentUser.getUserID());
+		
+		InfluencerHomePage.createPanelRes.setText(res);
 	}
 	
 	public static String deleteAllPanelByInfluencer(String userID) {
@@ -77,7 +79,7 @@ public class PanelController {
 	        return "Start time cannot be later than end time.";
 	    }
 
-	    return "Panel added successfully";
+	    return "true";
 	}
 
 	public static PanelHeader getPanel(String panelID) {

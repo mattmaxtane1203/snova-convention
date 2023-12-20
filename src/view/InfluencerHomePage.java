@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import controller.NavigationController;
 import controller.PanelController;
 import controller.UserController;
 
@@ -69,16 +70,18 @@ public class InfluencerHomePage {
 	
 	public Button viewButton = new Button("View Panel Statistcs");
 	
+	Button logout = new Button ("Logout");
+	
 	public static Label panelRes = new Label("");
 	
 	public static Label createPanelRes = new Label("");
 
 	private void styling() {
 
-		upcomingPanelTable.setMaxWidth(300);
-		finishedPanelTable.setMaxWidth(300);
-		upcomingPanelTable.setMaxHeight(200);
-		finishedPanelTable.setMaxHeight(200);
+		upcomingPanelTable.setMaxWidth(500);
+		finishedPanelTable.setMaxWidth(500);
+		upcomingPanelTable.setMaxHeight(300);
+		finishedPanelTable.setMaxHeight(300);
 
 		column1.setPrefWidth(300);
 		column2.setPrefWidth(300);
@@ -86,6 +89,8 @@ public class InfluencerHomePage {
 		column1.setResizable(false);
 		column2.setResizable(false);
 
+		panelRes.setStyle("-fx-text-fill: red;");
+		createPanelRes.setStyle("-fx-text-fill: red;");
 	}
 
 	private void init() {
@@ -109,7 +114,8 @@ public class InfluencerHomePage {
                 startLabel, startDatePicker, startTimeLabel, startTimeField,
                 endLabel, endDatePicker, endTimeLabel, endTimeField,
                 createPanelRes,
-                createButton);
+                createButton,
+                logout);
 		paneBox.getChildren().addAll(allpanelContainer, panelRes, finishButton, viewButton, formContainer);
 		infhomePane.setCenter(paneBox);
 
@@ -197,7 +203,9 @@ public class InfluencerHomePage {
 
 	}
 
-	private void action() {
+	private void action(Stage stage) {
+		NavigationController.navigateLoginPage(logout, stage);
+		
 		viewButton.setOnMouseClicked(e -> {
 	        PanelHeader selectedPanel = (PanelHeader) finishedPanelTable.getSelectionModel().getSelectedItem();
 
@@ -224,14 +232,17 @@ public class InfluencerHomePage {
 	}
 	
 	public InfluencerHomePage(Stage stage, User currentUser) {
-		this.currentUser = currentUser;
-		init();
-		styling();
-		action();
+	    this.currentUser = currentUser;
+	    init();
+	    styling();
+	    action(stage);
 
-		stage.setTitle("All Panels");
-		stage.setResizable(false);
-		stage.setScene(infhomeScene);
-		stage.show();
+	    stage.setTitle("All Panels");
+	    stage.setResizable(true); // Allow window resizing
+	    stage.setWidth(600);      // Set an initial width
+	    stage.setHeight(800);     // Set an initial height
+
+	    stage.setScene(infhomeScene);
+	    stage.show();
 	}
 }

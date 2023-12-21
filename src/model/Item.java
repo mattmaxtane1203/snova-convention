@@ -70,6 +70,7 @@ public class Item {
 		System.out.println(itemID + " " + userID + " " + itemName + " " + itemDescription + " " + price);
 	}
 
+//	Function to convert result set into items
 	private static ObservableList<Item> convertMultipleResultSet(ResultSet rs) {
 		
 		String currItemID, currUserID, currItemName, currItemDescription;
@@ -96,6 +97,7 @@ public class Item {
 		return items;
 	}
 
+//	Function to convert result set into item
 	private static Item convertResultSet(ResultSet rs) {
 		
 		String currItemID, currUserID, currItemName, currItemDescription;

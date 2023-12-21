@@ -82,6 +82,7 @@ public class UserController {
 		return "Influencer deleted successfully";
 	}
 
+//	Function to handle login
 	public static String login(String email, String password) {
 
 		if (email == null || email.equals("") || password == null || password.equals("")) {
@@ -103,6 +104,7 @@ public class UserController {
 
 //	Helper functions
 
+//	Check if registration information is valid
 	public static String registrationInformationIsValid(String username, String email, String password,
 			String confirmPassword, String role) {
 
@@ -135,12 +137,14 @@ public class UserController {
 		return "true";
 	}
 
+//	Function to check if password is valid
 	public static String passwordIsValid(String password, String confirmPassword) {
 
 		if (password.length() < 6) {
 			return "Password must be at least 6 characters long";
 		}
 
+//		Check if password is alphanumeric
 		boolean hasLetter = false;
 		boolean hasDigit = false;
 
@@ -169,6 +173,7 @@ public class UserController {
 		return "true";
 	}
 
+//	Function for button to login
 	public static void handleLogin(Button loginBtn, Stage stage) {
 	    loginBtn.setOnAction(e -> {
 	        String email = LoginPage.emailField.getText();
@@ -185,7 +190,7 @@ public class UserController {
 	    });
 	}
 
-
+//	Function for button to register
 	public static void handleRegister(Button registerBtn, Stage stage) {
 		registerBtn.setOnMouseClicked(e -> {
 			String username = RegisterPage.usernameField.getText();
@@ -207,6 +212,7 @@ public class UserController {
 		});
 	}
 
+//	Function for button in admin to delete user from table
 	public static void deleteUserFromTable(Button btn, TableView table, String currentRole) {
 		btn.setOnMouseClicked(e -> {
 			User selectedUser = (User) table.getSelectionModel().getSelectedItem();
@@ -233,6 +239,7 @@ public class UserController {
 		});
 	}
 
+//	Function to redirect users from login/register page
 	public static void redirectLogin(Button btn, Stage stage, String role, User user) {
 		if (role.equals("Fan")) {
 			NavigationController.navigateFanHomePage(btn, stage, user);
@@ -257,6 +264,7 @@ public class UserController {
 		System.out.println("Something went wrong...");
 	}
 
+//	Function to refresh table
 	public static void refreshTable(TableView table, String role) {
 		ObservableList<User> users = UserController.getAllUserInRole(role);
 

@@ -16,13 +16,10 @@ import view.VendorHomePage;
 public class Main extends Application {
 
 	public Main() {
-//		String res = TransactionController.addTransaction("26", "22", 1);
-//		System.out.println(res);
+		
 	}
 
 	public static void main(String[] args) {
-//		SWITCH THESE WHEN TESTING VIEWS AND CONTROLLERS
-		
 //		new Main();
 		launch(args);
 	}

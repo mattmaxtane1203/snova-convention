@@ -97,15 +97,16 @@ public class VendorHomePage {
 
 		ItemTable.setItems(ItemController.getAllItemsByVendor(currentUser.getUserID()));
 		
-		// Set selection model to allow selecting multiple rows
+		// Only allow single selection
         ItemTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        // Add a selection listener to update the text fields when a row is selected
+        // Update text field if an item is selected
         ItemTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Item>() {
             @Override
             public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
                 if (newValue != null) {
-                    // Update text fields with the selected item's values
+                	
+                    // Update text fields with the item's values
                     itemIDField.setText(newValue.getItemID());
                     nameField.setText(newValue.getItemName());
                     descField.setText(newValue.getItemDescription());

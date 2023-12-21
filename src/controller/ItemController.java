@@ -142,11 +142,14 @@ public class ItemController {
 		return items;
 	}
 
+//	Function to set button for fan to buy an item
 	public static void buyItemAction(Button btn, Item item, TextField qty, User currentUser) {
 		btn.setOnMouseClicked(e -> {
-			// Validate quantity input
 			try {
+				
+//				Parse integer from string
 				int quantity = Integer.parseInt(qty.getText());
+				
 				if (quantity <= 0) {
 					FanVendorPage.popupResponse.setText("Quantity must be greater than 0");
 					return;
@@ -166,12 +169,16 @@ public class ItemController {
 		FanVendorPage.popupResponse.setText(res);
 	}
 
+//	Function to set button for vendor to add item to database
 	public static void addItemAction(Button btn, User currentUser) {
 		btn.setOnMouseClicked(e -> {
+			
+//			Get values of text fields and store into variable
 			String itemName = VendorHomePage.nameField.getText();
 			String itemDescription = VendorHomePage.descField.getText();
 			BigDecimal itemPrice;
 
+//			Convert string to BigDecimal and store to variable
 			try {
 				itemPrice = new BigDecimal(VendorHomePage.priceField.getText());
 			} catch (NumberFormatException nfe) {
@@ -196,14 +203,15 @@ public class ItemController {
 
 	public static void updateItemAction(Button btn, User currentUser) {
 		btn.setOnMouseClicked(e -> {
-			// Disable the button to prevent multiple clicks
+			
+			// Disable button to prevent multiple clicks
 			btn.setDisable(true);
 
-			// Check if itemIDField is not empty
+			// If item ID field is empty, 
 			if (VendorHomePage.itemIDField.getText().isEmpty()) {
 				VendorHomePage.res.setText("Select an item to update");
 
-				// Re-enable the button
+				// Enable button after validation
 				btn.setDisable(false);
 				return;
 			}
@@ -271,9 +279,12 @@ public class ItemController {
 	}
 
 //	Helper function
+	
+//	Check if item information is valid (with userID)
 	public static String itemInformationValid(String userID, String itemName, String itemDescription,
 			BigDecimal price) {
 
+//		Check if user ID is empty
 		if (userID.equals("") || userID == null) {
 			return "User ID cannot be empty";
 		}
@@ -284,18 +295,22 @@ public class ItemController {
 			return "User does not exist";
 		}
 
+//		Check if item name is empty
 		if (itemName.equals("") || itemName == null) {
 			return "Item name cannot be empty";
 		}
 
+//		Check if item description is empty
 		if (itemDescription.equals("") || itemDescription == null) {
 			return "Item Description cannot be empty";
 		}
 
+//		Check if item description length is above 250
 		if (itemDescription.length() > 250) {
 			return "Item description cannot be longer than 250 characters";
 		}
 
+//		Check if price is empty or below or equal to 0
 		if (price == null | price.compareTo(BigDecimal.ZERO) <= 0) {
 			return "Price must be bigger than 0";
 		}
@@ -303,6 +318,7 @@ public class ItemController {
 		return "true";
 	}
 
+//	Check if item information is valid (without userID)
 	public static String itemInformationValid(String itemName, String itemDescription, BigDecimal price) {
 
 		if (itemName.equals("") || itemName == null) {

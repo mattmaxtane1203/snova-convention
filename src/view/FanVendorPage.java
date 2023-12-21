@@ -86,6 +86,7 @@ public class FanVendorPage {
 		allVendorTable.setItems(UserController.getAllUserInRole("Vendor"));
 		allItemTable.setItems(ItemController.getAllItems());
 
+//		If a new vendor is selected, automatically update the item table
 		allVendorTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 updateAllItemTable((User) newSelection);
@@ -100,6 +101,7 @@ public class FanVendorPage {
 
 	}
 	
+//	Get all items from vendor and update table
 	private void updateAllItemTable(User selectedUser) {
         ObservableList<model.Item> items = ItemController.getAllItemsByVendor(selectedUser.getUserID());
         allItemTable.setItems(items);

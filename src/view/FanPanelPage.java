@@ -169,41 +169,7 @@ public class FanPanelPage {
 
 	private void action(Stage stage) {
 		NavigationController.navigateFanHomePage(backButton, stage, currentUser);
-		
-		PanelController.updateUpcomingPanelTable();
-//		upcomingPanelTable.setOnMouseClicked(event -> {
-//
-//			if (event.getClickCount() == 1) {
-//				
-//				PanelHeader selectedPanel = (PanelHeader) upcomingPanelTable.getSelectionModel().getSelectedItem();
-//				
-//				if (selectedPanel != null) {
-//					updatePanelDetail(selectedPanel);
-//				}
-//			}
-//		});
-		
-		PanelController.updateFinishedPanelTable();
-//		finishedPanelTable.setOnMouseClicked(event -> {
-//			
-//			if (event.getClickCount() == 1) {
-//				PanelHeader selectedPanel = (PanelHeader) finishedPanelTable.getSelectionModel().getSelectedItem();
-//				
-//				if (selectedPanel != null) {
-//					updatePanelDetail(selectedPanel);
-//				}
-//			}
-//		});
-
 		PanelController.viewPanelDetailAction(detailButton);
-//		detailButton.setOnMouseClicked(e -> {
-//			
-//			PanelHeader selectedPanel = (PanelHeader) upcomingPanelTable.getSelectionModel().getSelectedItem();
-//			
-//			if (selectedPanel != null) {
-//				panelDetail(selectedPanel);
-//			}
-//		});
 	}
 
 	private void updatePanelDetail(PanelHeader selectedPanel) {

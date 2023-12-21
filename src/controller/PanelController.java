@@ -55,22 +55,28 @@ public class PanelController {
 		return "Succesfully deleted  all panel by UserID " + userID;
 	}
 
+//	Function to validate data for panel
 	private static String isValidPanelData(String panelTitle, String panelDesc, String location,
 			LocalDateTime startTime, LocalDateTime endTime) {
+		
+//		Check if panel title is empty
 		if (panelTitle.equals("") || panelDesc.equals("") || location.equals("")) {
 			return "Fields cannot be empty";
 		}
 
+//		Check if panel description is empty
 		if (panelDesc.length() > 250) {
 			return "Max description length is 250 characters long";
 		}
 
+//		Check if location is valid
 		if (!PanelController.hasTwoWords(location)) {
 			return "Location must be at least 2 words long.";
 		}
 
 		LocalDateTime now = LocalDateTime.now();
 
+//		Validate start time
 		if (startTime.isBefore(now)) {
 			return "Start time must be later than the current time.";
 		}
@@ -137,21 +143,29 @@ public class PanelController {
 		return "All attendance panel for this UserID " + userID + " has been deleted";
 	}
 
+//	Function to attend a panel
 	public static void attendAction(Button attendBtn, PanelHeader selectedPanel, User currentUser) {
+		
+//		If attend button is pressed, call attend panel function
 		attendBtn.setOnAction(e -> {
 			String res = PanelController.attendPanel(selectedPanel.getPanelID(), currentUser.getUserID());
 			FanPanelPage.response.setText(res);
 		});
 	}
 
+//	Function to refresh table in Influencer Home Page
 	public static void refreshTable(String userID) {
 		InfluencerHomePage.upcomingPanelTable.setItems(getAllUnfinishedPanelsByInfluencer(userID));
 		InfluencerHomePage.finishedPanelTable.setItems(getAllFinishedPanelsByInfluencer(userID));
 	}
 
+//	Function to handle the creation of panel
 	public static void handleCreatePanel(Button btn, User currentUser) {
+		
+//		If create panel button is pressed
 		btn.setOnMouseClicked(e -> {
 
+//			Get start and end date from input fields
 			LocalDateTime startDateTime = LocalDateTime.of(InfluencerHomePage.startDatePicker.getValue(),
 					parseTime(InfluencerHomePage.startTimeField.getText()));
 			LocalDateTime endDateTime = LocalDateTime.of(InfluencerHomePage.endDatePicker.getValue(),
@@ -162,8 +176,11 @@ public class PanelController {
 		});
 	}
 
+//	Function to parse time from text field
 	public static LocalTime parseTime(String timeString) {
 		try {
+			
+//			Parse time of pattern HH:mm
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			return LocalTime.parse(timeString, formatter);
 		} catch (DateTimeParseException e) {
@@ -172,12 +189,17 @@ public class PanelController {
 		}
 	}
 
+//	Function to view panel detail in finished panel table
 	public static void viewPanelAction(Button btn) {
 		btn.setOnMouseClicked(e -> {
+			
+//			Get selected panel header from finished panel table
 			PanelHeader selectedPanel = (PanelHeader) InfluencerHomePage.finishedPanelTable.getSelectionModel()
 					.getSelectedItem();
 
 			if (selectedPanel != null) {
+				
+//				View panel
 				InfluencerHomePage.panelDetail(selectedPanel.getPanelID());
 				return;
 			}
@@ -186,12 +208,17 @@ public class PanelController {
 		});
 	}
 
+//	Function to finish panel
 	public static void finishPanelAction(Button btn, User currentUser) {
 		btn.setOnMouseClicked(e -> {
+			
+//			Get selected panel header from upcoming panel table
 			PanelHeader selectedPanel = (PanelHeader) InfluencerHomePage.upcomingPanelTable.getSelectionModel()
 					.getSelectedItem();
 
 			if (selectedPanel != null) {
+				
+//				Finish panel and refresh table
 				PanelController.finishPanel(selectedPanel.getPanelID());
 				PanelController.refreshTable(currentUser.getUserID());
 				return;
@@ -201,6 +228,7 @@ public class PanelController {
 		});
 	}
 
+//	Function to view panel detail in upcoming panel table
 	public static void viewPanelDetailAction(Button btn) {
 		btn.setOnMouseClicked(e -> {
 
@@ -211,37 +239,6 @@ public class PanelController {
 				FanPanelPage.panelDetail(selectedPanel);
 			}
 		});
-	}
-
-	public static void updateUpcomingPanelTable() {
-		FanPanelPage.upcomingPanelTable.setOnMouseClicked(event -> {
-
-			if (event.getClickCount() == 1) {
-				
-				PanelHeader selectedPanel = (PanelHeader) FanPanelPage.upcomingPanelTable.getSelectionModel().getSelectedItem();
-				
-				if (selectedPanel != null) {
-					updatePanelDetail(selectedPanel);
-				}
-			}
-		});
-	}
-
-	public static void updateFinishedPanelTable() {
-		FanPanelPage.finishedPanelTable.setOnMouseClicked(event -> {
-			
-			if (event.getClickCount() == 1) {
-				PanelHeader selectedPanel = (PanelHeader) FanPanelPage.finishedPanelTable.getSelectionModel().getSelectedItem();
-				
-				if (selectedPanel != null) {
-					updatePanelDetail(selectedPanel);
-				}
-			}
-		});
-	}
-
-	private static void updatePanelDetail(PanelHeader selectedPanel) {
-
 	}
 
 	// VALIDASI TAMBAHAN
